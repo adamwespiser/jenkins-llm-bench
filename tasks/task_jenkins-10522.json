@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-10522",
+  "pr": 10522,
+  "title": "[JENKINS-75530] Implement dedicated healthcheck endpoint",
+  "merged_at": "2025-04-12",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-75530](https://issues.jenkins.io/browse/JENKINS-75530).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\r\n-->\r\n\r\n### Proposed changelog entries\r\n\r\n- A new `/health` endpoint is available to determine whether Jenkins is healthy.\r\n- Developer: plugins can contribute additional checks for the healthcheck endpoint.\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\r\nFor examples, see: https://www.jenkins.io/changelog/\r\n\r\nDo not include the Jira issue in the changelog entry.\r\nI",
+  "base_commit": "028d8b55fe",
+  "fixed_commit": "f68ec5bfdc",
+  "additions": 260,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/jenkins/health/HealthCheck.java",
+    "core/src/main/java/jenkins/health/HealthCheckAction.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/health/HealthCheckActionTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "HealthCheckActionTest",
+  "test_command": "mvn test -pl test -am -Dtest=HealthCheckActionTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=new_file. Integration test."
+}

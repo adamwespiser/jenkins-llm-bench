@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-11033",
+  "pr": 11033,
+  "title": "Add a Queue.tryWithLock() method that accepts a timeout.",
+  "merged_at": "2025-09-17",
+  "issue_text": "This PR overloads the `Queue.tryWithLock()` method with a signature that accepts a timeout.\r\n\r\nWe have an internal plugin that is subject to thundering herd scenarios during high job execution and agent turnover rate. The current use of `Queue.withLock()` in our plugin leads to some long-running requests that lead to client-side timeouts and redundant retries. We would prefer to be able to have a timeout on the lock acquisition to be able to return a 503 response to clients and trigger exponential backoff during these thundering-herd scenarios.\r\n\r\n### Testing done\r\n\r\nNew tests have been added to cover various scenarios of tryWithLock: successful acquisition within the timeout, failure to acquire within the timeout, and acquisition without contention.\r\n\r\n### Proposed changelog entries\r\n\r\nSince this is just introducing a new utility method for plugin developers, I don't believe this warrants a changelog entry (but I can add one if desired).\r\n\r\n### Proposed changelog category\r\n\r\n/label skip-changelog\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [x] New or substantially changed JavaScript is no",
+  "base_commit": "066f4c2fc2",
+  "fixed_commit": "863a8a46b6",
+  "additions": 147,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/Queue.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/QueueTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "QueueTest",
+  "test_command": "mvn test -pl test -am -Dtest=QueueTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

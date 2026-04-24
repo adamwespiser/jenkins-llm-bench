@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-9437",
+  "pr": 9437,
+  "title": "Allow administrative monitors to be displayed for users with `Overall/MANAGE` permission",
+  "merged_at": "2024-07-11",
+  "issue_text": "This allows users with `Overall/MANAGE` permission but not `Overall/SYSTEM_READ` to display administrative monitors if the administrative monitor has been implemented to allow it.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\r\n-->\r\n\r\nVerified with a custom administrative monitor allowing `Overall/MANAGE` that it can be displayed in the corresponding UI area by a user with this permission.\r\n\r\n### Proposed changelog entries\r\n\r\n- Allow some administrative monitors to be displayed for users with `Overall/MANAGE` permission\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the impe",
+  "base_commit": "e1a86ef259",
+  "fixed_commit": "ea07383306",
+  "additions": 132,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/hudson/model/AdministrativeMonitor.java",
+    "core/src/main/java/jenkins/model/Jenkins.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/management/AdministrativeMonitorsDecoratorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "AdministrativeMonitorsDecoratorTest",
+  "test_command": "mvn test -pl test -am -Dtest=AdministrativeMonitorsDecoratorTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

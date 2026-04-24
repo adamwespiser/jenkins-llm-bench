@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-9127",
+  "pr": 9127,
+  "title": "[JENKINS-72947] Support symbols in `TopLevelItemDescriptor#getIconClassName()`",
+  "merged_at": "2024-04-14",
+  "issue_text": "When adding a new Item via `newJob` the corresponding Descriptor can now make use of symbols\r\n\r\nAs a sample I modified the freestyle project to use a new symbol (svg source: https://www.svgrepo.com/svg/151600/package)\r\n\r\nThe image shows the old page layout with manual modifying the css in the browser\r\n![image](https://github.com/jenkinsci/jenkins/assets/17767050/7cf5c275-dcd2-438b-bbb7-0edb86a1c261)\r\n\r\nAlternate icon from @janfaracik with new layout\r\n![image](https://github.com/jenkinsci/jenkins/assets/17767050/7a5a21eb-f3c5-4e19-a918-acdcdf5cf8b7)\r\n\r\n\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-72947](https://issues.jenkins.io/browse/JENKINS-72947).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\nManual testing opening `newJob` in root and in a folder\r\nAdded a new test that check svg is inserted and has proper class `icon-xlg`\r\nAdjusted test for old iconClassName\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in w",
+  "base_commit": "b59ec5aea9",
+  "fixed_commit": "e9adbc9833",
+  "additions": 49,
+  "deletions": 8,
+  "source_files": [
+    "core/src/main/java/hudson/model/FreeStyleProject.java",
+    "core/src/main/java/hudson/model/View.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/ViewTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ViewTest",
+  "test_command": "mvn test -pl test -am -Dtest=ViewTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,30 @@
+{
+  "id": "jenkins-23859",
+  "pr": 23859,
+  "title": "API tokens with expiration date",
+  "merged_at": "2026-01-26",
+  "issue_text": "API tokens can now get an optional expiration date. Added a select drop down from where you can choose from predefined durations (default is 30 days), a custom date (max 1 year in the selector from the date input field) and no expiration. Expiration date is shown in the list. Not expiring tokens and tokens that expire in less than 7 days are marked with warning, expired tokens are marked with error.\r\nThe sidepanel on the user page now has a badge for the security action when there are tokens that expired or are about to expire. In the header the user avatar has a badge and in the dropdown is a badge.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace <issue-number> with the issue number.\r\n-->\r\n\r\nFixes #16695\r\n<img width=\"1338\" height=\"652\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ca80138c-717b-42a5-a9ca-6f86d5f93971\" />\r\n\r\n<img width=\"631\" height=\"566\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7bf6e488-637c-486b-99c7-ea37e4d7efc9\" />\r\n<img width=\"557\" height=\"735\" alt=\"image\" src=\"https://github.com/user-attachments/assets/239b302f-cc5f-4203-8847-2a0098ccf40b\" />\r\n\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in the issue tracker, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require an issue for minor improvements.\r\n * Major new features should have an issue created.\r\n-->\r\n\r\n### Testing done\r\nInteractive testing for the UI part\r\nAdded tests for the scripting part, ensuring that expired tokens are not accepted\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does n",
+  "base_commit": "e73ae832d4",
+  "fixed_commit": "5490f91afa",
+  "additions": 450,
+  "deletions": 39,
+  "source_files": [
+    "core/src/main/java/hudson/model/userproperty/UserPropertyCategorySecurityAction.java",
+    "core/src/main/java/jenkins/model/navigation/UserAction.java",
+    "core/src/main/java/jenkins/security/ApiTokenProperty.java",
+    "core/src/main/java/jenkins/security/apitoken/ApiTokenStore.java",
+    "core/src/main/java/jenkins/security/apitoken/TokenUuidAndPlainValue.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/ApiTokenPropertyTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ApiTokenPropertyTest",
+  "test_command": "mvn test -pl test -am -Dtest=ApiTokenPropertyTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "5 source file(s), signal=modified_with_new_methods. Integration test."
+}

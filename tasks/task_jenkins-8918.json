@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-8918",
+  "pr": 8918,
+  "title": "Fixing `NotSerializableException: org.acegisecurity.context.SecurityContext$1`",
+  "merged_at": "2024-02-01",
+  "issue_text": "While testing some CloudBees CI code in a non-production context involving serialized web sessions, I noticed an error\n\n```\njava.io.NotSerializableException: org.acegisecurity.context.SecurityContext$1\n```\n\nLooking into #4848 I noticed that I had forgotten `implements Serializable` in a spot:\n\n```console\n$ javap -classpath ~/.m2/repository/org/acegisecurity/acegi-security/1.0.7/acegi-security-1.0.7.jar org.acegisecurity.context.SecurityContext\nCompiled from \"SecurityContext.java\"\npublic interface org.acegisecurity.context.SecurityContext extends java.io.Serializable {\n  public abstract org.acegisecurity.Authentication getAuthentication();\n  public abstract void setAuthentication(org.acegisecurity.Authentication);\n}\n```\n\n### Testing done\n\nTest without patch:\n\n```\njava.io.NotSerializableException: org.acegisecurity.context.SecurityContext$1\n\tat java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1175)\n\tat java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:345)\n\tat org.acegisecurity.context.SecurityContextTest.serDeser(SecurityContextTest.java:61)\n\tat org.acegisecurity.context.SecurityContextTest.serializabilityFromSpring(SecurityContextTest.java:44)\njava.io.NotSerializableException: org.acegisecurity.context.SecurityContextImpl\n\tat java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1175)\n\tat java.base/java.io.ObjectOutputStream.defaultWriteFields(ObjectOutputStream.java:1543)\n\tat java.base/java.io.ObjectOutputStream.writeSerialData(ObjectOutputStream.java:1500)\n\tat java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1423)\n\tat java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1169)\n\tat java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:345)\n\tat org.acegisecurity.context.SecurityContextTest.serDeser(SecurityContextTest.java:61)\n\tat org.acegisecurity.context.SecurityContextTest.serializabilityToSpring(SecurityContextTest.java:54)\n`",
+  "base_commit": "c00a30da80",
+  "fixed_commit": "ddf68d3874",
+  "additions": 115,
+  "deletions": 25,
+  "source_files": [
+    "core/src/main/java/org/acegisecurity/context/SecurityContext.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/org/acegisecurity/context/SecurityContextTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "core",
+  "test_class": "SecurityContextTest",
+  "test_command": "mvn test -pl core -am -Dtest=SecurityContextTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Unit test."
+}

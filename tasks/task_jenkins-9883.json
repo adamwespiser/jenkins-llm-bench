@@ -1,0 +1,31 @@
+{
+  "id": "jenkins-9883",
+  "pr": 9883,
+  "title": "Display appropriate GUI that accurately displays offline by design",
+  "merged_at": "2024-10-23",
+  "issue_text": "Reworked computer icon and associated descriptions to be controlled by the `OfflineCause` implementation. For implementations such as `RetentionStrategy.Demand`, this allows to set an offline cause that can't be interpreted by the end user as an error.\r\n\r\n* Allow the retention strategy to set an offline cause. For the on-demand retention strategy, this allows to provide a reason why the agent is offline, instead of leaving the agent offline with no message.\r\n* Introduced `pause` and `computer-paused` symbols, used by the on-demand retention strategy to indicate the computer is offline on purpose and is not in error state\r\n* Add `getOfflineCause` to `IComputer` and refactor related methods to pull up methods that make sense at the interface level.\r\n* Extract `IOfflineCause` interface from `OfflineCause` to make it possible to render offline causes in other runtimes (CloudBees CI HA)\r\n\r\n**Screenshots**\r\n\r\n| Description | Before | After |\r\n|--------|--------|--------|\r\n| On-demand agent offline before any connection attempt | ![agent-ondemand-offline-before](https://github.com/user-attachments/assets/cd70cf39-5a2e-4eea-a350-36a9f4788465) | ![agent-ondemand-offline](https://github.com/user-attachments/assets/59feb108-ca02-407a-ac81-969696ccde55) |\r\n| Agent overview | ![agent-set-overview-before](https://github.com/user-attachments/assets/c52bd292-5d70-43d6-a096-701c0cc3c41f) | ![agent-set-overview](https://github.com/user-attachments/assets/c7dcf587-eae2-4445-adfd-8f797267e21b) |\r\n| Agent temporary offline | ![agent-temporary-offline-user-before](https://github.com/user-attachments/assets/2f922b4e-e7ad-4df6-9f15-2cac5fb4c006) | ![agent-temporary-offline-user](https://github.com/user-attachments/assets/a8044d78-67df-45b1-bcfc-c5b31de730c1) |\r\n| Agent tooltip when offline due to idle | No tooltip | ![agent-tooltip-idle](https://github.com/user-attachments/assets/bcf80fb7-f159-4363-b61b-8a6e0b2d8677) |\r\n| Agent tooltip when temporary offline | No tooltip | ![agent-tooltip-",
+  "base_commit": "2da45fc19f",
+  "fixed_commit": "d9fbb65e98",
+  "additions": 323,
+  "deletions": 57,
+  "source_files": [
+    "core/src/main/java/hudson/model/Computer.java",
+    "core/src/main/java/hudson/slaves/OfflineCause.java",
+    "core/src/main/java/hudson/slaves/RetentionStrategy.java",
+    "core/src/main/java/hudson/slaves/SimpleScheduledRetentionStrategy.java",
+    "core/src/main/java/jenkins/model/IComputer.java",
+    "core/src/main/java/jenkins/widgets/ExecutorsWidget.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/ComputerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ComputerTest",
+  "test_command": "mvn test -pl test -am -Dtest=ComputerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "6 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-23865",
+  "pr": 23865,
+  "title": "Ignore casing in `AvatarContributor#extractDomainFromUrl`",
+  "merged_at": "2025-12-01",
+  "issue_text": "Amends #11269 and adds case-insensitivity to `AvatarContributor#extractDomainFromUrl`.\r\n\r\nNeither scheme nor host are case-sensitive, so we can prevent adding duplicates here.\r\n\r\n### Testing done\r\n\r\nAdded two tests verifying the case-insensitivity.\r\n\r\n### Proposed changelog entries\r\n\r\n- Ignore casing in `AvatarContributor#extractDomainFromUrl`.\r\n\r\n### Proposed changelog category\r\n\r\n/label rfe, developer \r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [ ] The issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] UI changes do not introduce regressions when enforcing the current default rules of [Content Security Policy Plugin](https://plugins.jenkins.io/csp/). In particular, new or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [ ] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [ ] For new APIs and extension points, there is a link to at least one consumer.\r\n\r\n### Desired reviewers\r\n\r\n@daniel-beck \r\n\r\nBefore the changes",
+  "base_commit": "6731b9737f",
+  "fixed_commit": "d5ecddb4d4",
+  "additions": 20,
+  "deletions": 2,
+  "source_files": [
+    "core/src/main/java/jenkins/security/csp/AvatarContributor.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/security/csp/AvatarContributorTest.java",
+    "test/src/test/java/jenkins/security/csp/AvatarContributorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "AvatarContributorTest",
+  "test_command": "mvn test -pl core -am -Dtest=AvatarContributorTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

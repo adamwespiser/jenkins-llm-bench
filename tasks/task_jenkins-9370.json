@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9370",
+  "pr": 9370,
+  "title": "[JENKINS-73246] Fix text shown in unexpected locale",
+  "merged_at": "2024-06-11",
+  "issue_text": "See [JENKINS-73246](https://issues.jenkins.io/browse/JENKINS-73246).\r\n\r\nRef: https://github.com/jenkinsci/jenkins/pull/8912#issuecomment-2131170362\r\n\r\nSpecial treatment if language is `en`\r\n\r\n### Testing done\r\n\r\nrun\r\n```\r\nmvn clean verify\r\n```\r\n\r\nInteractive test before this change shows Italian help text for \"Manage Jenkins\" -> \"System\" -> \"Quiet period\" when I am running in English language.  After this change the help text for \"Manage Jenkins\" -> \"System\" -> \"Quiet period\" is correctly displayed as English.\r\n\r\n### Proposed changelog entries\r\n\r\n- Show help text in the correct locale even if user has an alternate language option defined in their browser (regression in 2.444).\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [x] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [x] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [x] For new AP",
+  "base_commit": "386e04c4e5",
+  "fixed_commit": "0ad66571bf",
+  "additions": 23,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/Descriptor.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/GetLocaleStaticHelpUrlTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "GetLocaleStaticHelpUrlTest",
+  "test_command": "mvn test -pl core -am -Dtest=GetLocaleStaticHelpUrlTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

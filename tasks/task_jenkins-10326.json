@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10326",
+  "pr": 10326,
+  "title": "Remove `/exception` endpoint",
+  "merged_at": "2025-03-05",
+  "issue_text": "I agree with the author of the test I'm changing: This endpoint shouldn't exist in production code.\r\n\r\nGiven the reference to JENKINS-13625 in https://github.com/jenkinsci/jenkins/commit/18963ee9af2b98ce94eda799069d9135f6031a0e it apparently was always only intended as a test utility, which can be done more nicely as a `@TestExtension` in tests.\r\n\r\n### Testing done\r\n\r\nNone, too trivial.\r\n\r\nQuick GH code finds no callers.\r\n\r\n### Proposed changelog entries\r\n\r\nNone, too minor.\r\n\r\n### Proposed changelog category\r\n\r\n/label skip-changelog\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n<!-- Comment:\r\nLeave the proposed upgrade guidelines in the pull request with the \"N/A\" value if no upgrade guidelines are needed.\r\nThe changelog generator relies on the presence of the upgrade guidelines section as part of its data extraction process.\r\n-->\r\n\r\n### Submitter checklist\r\n\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [ ] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [ ] For dependency up",
+  "base_commit": "2a88dba68b",
+  "fixed_commit": "177b452109",
+  "additions": 20,
+  "deletions": 15,
+  "source_files": [
+    "core/src/main/java/jenkins/model/Jenkins.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/StackTraceSuppressionTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "StackTraceSuppressionTest",
+  "test_command": "mvn test -pl test -am -Dtest=StackTraceSuppressionTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

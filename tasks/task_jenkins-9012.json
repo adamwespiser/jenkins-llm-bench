@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9012",
+  "pr": 9012,
+  "title": "[JENKINS-72796] stable context classloader for Computer.threadPoolForRemoting",
+  "merged_at": "2024-03-06",
+  "issue_text": "Whilst the threadpool used reset the context classloader at the end of any task, it did not ensure that the initial classloader used was anything sepcific, rather it would use whatever the calling threads contextClassLoader was.\r\n\r\nThis is now fixed as we use the Jenkins WebApp classloader (same as the Timer) which is used by (A)PeriodicTasks.\r\n\r\nWhilst we should really not have a context classloader (aka null) and this should be set where needed by code, almost everywhere in Jenkins the context classloader is already the webapp classloader, and so setting this to be different depending on how things where called would seemingly be a little scary.  Arguably this and other context classloaders should be all set to null and any code that wants different should be changed, but this is a larger piece of work that would have potential impact on an unknown number of plugins in the ecosystem, so this fix uses what was set > 90% of the time.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-72796](https://issues.jenkins.io/browse/JENKINS-72796).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than compl",
+  "base_commit": "b5c5caa7ea",
+  "fixed_commit": "89195cc248",
+  "additions": 44,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/model/Computer.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/model/ComputerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "ComputerTest",
+  "test_command": "mvn test -pl core -am -Dtest=ComputerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-9219",
+  "pr": 9219,
+  "title": "[JENKINS-73090] Handle CR from `LineTransformationOutputStream`",
+  "merged_at": "2024-05-18",
+  "issue_text": "See [JENKINS-73090](https://issues.jenkins.io/browse/JENKINS-73090) for background.\r\n\r\n### Testing done\r\n\r\nWithout the fix, the `cr` test with the count set to a billion failed with\r\n\r\n```\r\njava.lang.OutOfMemoryError: Java heap space\r\n\tat java.base/java.util.Arrays.copyOf(Arrays.java:3745)\r\n\tat java.base/java.io.ByteArrayOutputStream.grow(ByteArrayOutputStream.java:120)\r\n\tat java.base/java.io.ByteArrayOutputStream.ensureCapacity(ByteArrayOutputStream.java:95)\r\n\tat java.base/java.io.ByteArrayOutputStream.write(ByteArrayOutputStream.java:137)\r\n\tat hudson.console.LineTransformationOutputStream.write(LineTransformationOutputStream.java:56)\r\n\tat hudson.console.LineTransformationOutputStream.write(LineTransformationOutputStream.java:75)\r\n\tat java.base/java.io.OutputStream.write(OutputStream.java:122)\r\n\tat hudson.console.LineTransformationOutputStreamTest.cr(LineTransformationOutputStreamTest.java:45)\r\n```\r\n\r\n(I am not leaving this count that high in the committed test since when it passes it takes over two minutes of high CPU on my laptop.)\r\n\r\nI also tried installing the Timestamper plugin, enabling the global decorator (auto timestamps in all Pipeline builds), and running the Windows `git clone` pipeline mentioned in Jira. This produced timestamped output, though the output did seem to come all at once, though that seemed to be an aspect of Git not Jenkins so far as I could tell from looking at the `jenkins.log` file in the workspace temp dir; so I also tried\r\n\r\n```groovy\r\nnode('linux') {\r\n    sh 'set +x; for i in `seq 00 99`; do printf \"$i\\r\"; sleep 1; done'\r\n}\r\n```\r\n\r\nwhich did produce live timestamped output, though the classic console does not reliably show it; Pipeline Graph View plugin does. (`tail -f \u2026/builds/\u2026/log` from a terminal actually updates the line in place.)\r\n\r\n### Proposed changelog entries\r\n\r\n- Treat lines of text (mainly in build logs) as completed by a single carriage return in addition to a newline or carriage return plus newline, avoiding an out of",
+  "base_commit": "90a6ac5c38",
+  "fixed_commit": "aaf4b64cc0",
+  "additions": 79,
+  "deletions": 7,
+  "source_files": [
+    "core/src/main/java/hudson/console/HyperlinkNote.java",
+    "core/src/main/java/hudson/console/LineTransformationOutputStream.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/console/LineTransformationOutputStreamTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "core",
+  "test_class": "LineTransformationOutputStreamTest",
+  "test_command": "mvn test -pl core -am -Dtest=LineTransformationOutputStreamTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=new_file. Unit test."
+}

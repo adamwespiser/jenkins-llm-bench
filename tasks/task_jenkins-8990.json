@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-8990",
+  "pr": 8990,
+  "title": "Null out `ProxyConfiguration.userName` on save",
+  "merged_at": "2024-02-28",
+  "issue_text": "Analysis of a bug report for CloudBees CI showed that when a proxy was configured with a username & password, uses of `newHttpClientBuilder` would (silently!) fail to pass an `Authorization` header to the real server, but only on Java 17 or newer. (As of https://github.com/openjdk/jdk/commit/028f2e14b3550dd1f2a358a2a0aaf83d4a824af0 I think; the same code works on Java 11.) This issue is described in [JDK-8306745](https://bugs.openjdk.org/browse/JDK-8306745) complete with a unit test, but alas that was closed. The test there looks similar to the Jenkins authenticator, including the logic https://github.com/jenkinsci/jenkins/blob/f7fea8d891dccedd6b16391ade1bef95374e8207/core/src/main/java/hudson/ProxyConfiguration.java#L162 which correctly reserves the authentication for the proxy server. So far as I can tell there is no practical way to make `newHttpClientBuilder` behave correctly on Java 17 when an authenticated proxy is configured: the bug evaluation says you should\n\n> [not] use any authenticator, and explicitly handle 401/407 in the calling code\n\nwhich is only an option if the complete usage including request is redesigned to manually check for a 407 and retry with a `Proxy-Authorization` header, but that logic cannot be encapsulated in a `HttpClient.Builder` return value unless Jenkins implemented its own `Builder` and a special delegating implementation of `HttpClient`.\n\nWhile looking at that, I saw that the reproducer claimed the bug occurred even when a username was _not_ set, which seems to be because the GUI configuration of the proxy after #3935 saved `\"\"` rather than `null` when the username text field was left blank. This at least is easy to fix, limiting the scope of the problem.\n\n### Testing done\n\nWithout `setUserName` change, test fails\n\n```\njava.lang.AssertionError: expected null, but was:<>\n\tat org.junit.Assert.fail(Assert.java:89)\n\tat org.junit.Assert.failNotNull(Assert.java:756)\n\tat org.junit.Assert.assertNull(Assert.java:738)\n\tat org.junit.Assert.",
+  "base_commit": "20263d06d4",
+  "fixed_commit": "d42e0786a4",
+  "additions": 78,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/hudson/ProxyConfiguration.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/ProxyConfigurationManagerGUITest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "ProxyConfigurationManagerGUITest",
+  "test_command": "mvn test -pl test -am -Dtest=ProxyConfigurationManagerGUITest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10023",
+  "pr": 10023,
+  "title": "Recover views after error in `Jenkins.load`",
+  "merged_at": "2024-12-12",
+  "issue_text": "I had occasionally seen mysterious errors in CloudBees CI which I finally tracked down by observing that they came after a warning about reloading `$JENKINS_HOME/config.xml` from disk. #8413 made this somewhat safer but not enough.\r\n\r\n([CloudBees-internal reference](https://cloudbees.atlassian.net/browse/BEE-53211))\r\n\r\n### Testing done\r\n\r\nWithout the fix, the assertions about `.primaryView` and `.views` fail. More interestingly, while browsing the dashboard (`goTo(\"\")`) simply fails with a 404 (Stapler trace is pretty obvious: looking up the primary view fails since it is null), browsing some other pages produces two `StackOverflowError`s from Stapler/Jelly:\r\n\r\n```\r\n\u2026\r\n\tat org.kohsuke.stapler.jelly.JellyViewScript.run(JellyViewScript.java:98)\r\n\tat org.kohsuke.stapler.jelly.IncludeTag.doTag(IncludeTag.java:174)\r\n\tat org.apache.commons.jelly.impl.TagScript.run(TagScript.java:271)\r\n\tat org.kohsuke.stapler.jelly.JellyViewScript.run(JellyViewScript.java:98)\r\n\u2026\r\n```\r\n\r\nand\r\n\r\n```\r\n\u2026\r\n\tat org.apache.commons.jelly.JellyContext.getVariableWithDefaultValue(JellyContext.java:260)\r\n\tat org.apache.commons.jelly.JellyContext.getVariableWithDefaultValue(JellyContext.java:260)\r\n\u2026\r\n```\r\n\r\nwhich seems to be caused by an unfortunate default logic in `IncludeTag` resulting in an infinite recursion when `it=null`.\r\n\r\n### Proposed changelog entries\r\n\r\n- Restore the list of views after a failed attempt to reload global configuration, to avoid further rendering errors.\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Desired reviewers\r\n\r\n@Vlatombe\r\n\r\nBefore the changes are marked as `ready-for-merge`:\r\n\r\n```[tasklist]\r\n### Maintainer checklist\r\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\r\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\r\n- [ ] Changelog entries in the pull request title and/or **Proposed changelog entries** are accurate, human-readable, and in the impe",
+  "base_commit": "d773eb93a1",
+  "fixed_commit": "4943f167de",
+  "additions": 33,
+  "deletions": 4,
+  "source_files": [
+    "core/src/main/java/jenkins/model/Jenkins.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/JenkinsTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "JenkinsTest",
+  "test_command": "mvn test -pl test -am -Dtest=JenkinsTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

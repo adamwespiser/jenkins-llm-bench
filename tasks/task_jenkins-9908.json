@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9908",
+  "pr": 9908,
+  "title": "[JENKINS-73845] Fix OperatingSystemEndOfLifeAdminMonitor endOfLifeDate displayed on first warning day",
+  "merged_at": "2024-10-25",
+  "issue_text": "See [JENKINS-73845](https://issues.jenkins.io/browse/JENKINS-73845). On the first day the warning should be displayed, the EOL date displayed was the default `2099-12-31`.\n\n### Testing done\n\n* Change the `end-of-life-data.json` with:\n\n```\n  {\n    \"pattern\": \"Ubuntu.* 20.04.*\",\n    \"endOfLife\": \"2025-04-24\"\n  },\n```\n\n* Build Jenkins WAR\n* Validate that it shows the monitor and the correct EOL date\n\n### Proposed changelog entries\n\n- Fix End of Life Operating System monitor that shows 2099-12-31 on the first day a warning should be displayed.\n\n### Proposed upgrade guidelines\n\nN/A\n\n\n```[tasklist]\n### Submitter checklist\n- [x] The Jira issue, if it exists, is well-described.\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\n- [x] There is automated testing or an explanation as to why this change has no tests.\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\n- [x] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\n- [x] For dependency updates, there are links to external changelogs and, if possible, full differentials.\n- [x] For new APIs and extension points, there is a link to at least one consumer.\n```\n\n### Desired reviewers\n\n@mention\n\n<!-- Comment:\nIf you need an accelerated review p",
+  "base_commit": "5ab2262790",
+  "fixed_commit": "9e256de2d1",
+  "additions": 26,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/jenkins/monitor/OperatingSystemEndOfLifeAdminMonitor.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/monitor/OperatingSystemEndOfLifeAdminMonitorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "OperatingSystemEndOfLifeAdminMonitorTest",
+  "test_command": "mvn test -pl core -am -Dtest=OperatingSystemEndOfLifeAdminMonitorTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

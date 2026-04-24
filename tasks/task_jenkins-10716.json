@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10716",
+  "pr": 10716,
+  "title": "Allow to queue async periodic work",
+  "merged_at": "2025-06-28",
+  "issue_text": "When triggering an async periodic work, it may be useful to queue it if it is already running, instead of discarding the extra execution.\r\n\r\nFor example, the `Queue` maintenance logic could use this, if the queue was actually initialized after the extension system was set up.\r\n\r\nI find myself needing this to handle triggering a global process based on events with a backup cron-based triggering, while ensuring a single instance runs at a given time, and queuing an extra execution in case more events occur while it is running.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-XXXXX](https://issues.jenkins.io/browse/JENKINS-XXXXX).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code befor",
+  "base_commit": "e8ea2ff25f",
+  "fixed_commit": "0833299bde",
+  "additions": 102,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/model/AsyncPeriodicWork.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/AsyncPeriodicWorkTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "AsyncPeriodicWorkTest",
+  "test_command": "mvn test -pl test -am -Dtest=AsyncPeriodicWorkTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

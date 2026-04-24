@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9591",
+  "pr": 9591,
+  "title": "Friendlier handling of `DeploymentHandshakeException` from CLI in `-webSocket` mode",
+  "merged_at": "2024-08-30",
+  "issue_text": "If the CLI client gets as far as authenticating the connection and establishing the WebSocket upgrade, then the remaining error handling is fairly well defined https://github.com/jenkinsci/jenkins/blob/48f7a0c780fc38579bbfc8432dc6a2951883d80b/core/src/main/java/hudson/cli/CLICommand.java#L223-L237 and tested. However I noticed that lower-level errors making the connection were not reported gracefully by the client. (They are not reported very gracefully in the older `-http` mode either, but as of #7605 that is not used by default.)\n\nOriginally noticed in the context of a proprietary plugin sending a 401 response under certain circumstances, but in fact seems applicable also to the more mundane scenaio of a mistyped API token.\n\nNote that the response body is not exposed by the Tyrus client (even importing implementation classes), so this cannot be displayed, only the status code and headers. I actually prototyped a rewrite to the JDK\u2019s built-in WebSocket client, which [offers access to the response](https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/WebSocketHandshakeException.html#getResponse()), but [the body](https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpResponse.html#body()) is still empty. (It may be a good idea to do this rewrite anyway, to avoid an external dep and bloat in `jenkins-cli.jar`.)\n\n### Testing done\n\nWithout patch:\n\n```\nio.jenkins.cli.shaded.org.glassfish.tyrus.client.exception.DeploymentHandshakeException: Handshake error.\n\tat io.jenkins.cli.shaded.org.glassfish.tyrus.client.exception.Exceptions.deploymentException(Exceptions.java:38)\n\tat io.jenkins.cli.shaded.org.glassfish.tyrus.client.ClientManager$3$1.run(ClientManager.java:622)\n\tat io.jenkins.cli.shaded.org.glassfish.tyrus.client.ClientManager$3.run(ClientManager.java:657)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)\n\tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\ta",
+  "base_commit": "fc73c2622a",
+  "fixed_commit": "15e045f03d",
+  "additions": 40,
+  "deletions": 1,
+  "source_files": [
+    "cli/src/main/java/hudson/cli/CLI.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/cli/CLIActionTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "CLIActionTest",
+  "test_command": "mvn test -pl test -am -Dtest=CLIActionTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-26188",
+  "pr": 26188,
+  "title": "Fix JENKINS-35272: Prevent afterDisconnect() from being called twice",
+  "merged_at": "2026-02-18",
+  "issue_text": "Added AtomicBoolean flag to ensure afterDisconnect() is only called once per disconnect cycle. The flag is reset when a new connection is established via setChannel(). This prevents duplicate executions when an agent disconnects, which was causing issues like VMs shutting down twice.\r\n\r\nFixes #17204\r\n\r\n## Root Cause\r\nThe `afterDisconnect()` method was being called in two places:\r\n1. In the channel listener's `onClosed()` callback (line ~654) - triggered automatically when channel closes\r\n2. In the explicit `disconnect()` method (line ~826) - called during manual disconnects\r\n\r\nWhen a manual disconnect occurred, `closeChannel()` would trigger the listener's `onClosed()` callback, causing both code paths to execute and `afterDisconnect()` to run twice.\r\n\r\n## Solution\r\nAdded a thread-safe `AtomicBoolean` flag (`afterDisconnectCalled`) that:\r\n- Uses `compareAndSet(false, true)` to ensure only the first caller succeeds\r\n- Is reset to `false` when a new connection is established in `setChannel()`\r\n- Prevents duplicate execution while maintaining thread safety for concurrent disconnect scenarios\r\n\r\n### Testing done\r\n\r\n- Built successfully with `mvn -am -pl war,bom -Pquick-build clean install`\r\n- All unit tests pass with `mvn test -Plight-test`\r\n- Code formatting verified with `mvn spotless:check`\r\n- Manually verified the flag logic:\r\n  - Flag is set to false on new connection\r\n  - First `afterDisconnect()` call succeeds (flag changes from false to true)\r\n  - Second `afterDisconnect()` call is blocked (flag is already true)\r\n\r\n### Screenshots (UI changes only)\r\n\r\nN/A - This is a backend logic fix with no UI changes\r\n\r\n### Proposed changelog entries\r\n\r\n- Prevent `afterDisconnect()` from being called twice when an agent disconnects\r\n\r\n### Proposed changelog category\r\n\r\n/label bug\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [x] The issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the a",
+  "base_commit": "2b369628c8",
+  "fixed_commit": "799d362886",
+  "additions": 71,
+  "deletions": 3,
+  "source_files": [
+    "core/src/main/java/hudson/slaves/SlaveComputer.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/ComputerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ComputerTest",
+  "test_command": "mvn test -pl test -am -Dtest=ComputerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

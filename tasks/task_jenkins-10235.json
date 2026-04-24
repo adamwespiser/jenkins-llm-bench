@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10235",
+  "pr": 10235,
+  "title": "[JENKINS-58743] Allow to provide a custom path for master key",
+  "merged_at": "2025-02-06",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-58743](https://issues.jenkins.io/browse/JENKINS-58743).\r\n\r\nThe following system properties can be used to control the behaviour\r\n\r\n* `jenkins.security.DefaultConfidentialStore.file` allows to provide an alternative path to load/store the master key (when unset, defaults to `$JENKINS_HOME/secrets/master.key` as previously)\r\n* `jenkins.security.DefaultConfidentialStore.readOnly` when `true`, prevents Jenkins from generating a master key. If the master key file doesn't exist, Jenkins fails to start.\r\n\r\nUser-facing doc https://github.com/jenkins-infra/jenkins.io/pull/7859\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<details>\r\n<summary>Create master.key beforehand in standard path</summary>\r\n\r\n```\r\nexport JENKINS_HOME=/tmp/cc\r\nmkdir -p $JENKINS_HOME/secrets\r\nopenssl rand -hex 128 >$JENKINS_HOME/secrets/master.key\r\njava -Djenkins.master.key.readOnly=true -jar war/target/jenkins.war\r\n```\r\n\r\n\u2705 Normal startup sequence\r\n\r\nContent of `$JENKINS_HOME/secrets` after startup\r\n\r\n```\r\ninitialAdminPassword  jenkins.model.Jenkins.crumbSalt  master.key\r\n```\r\n</details>\r\n\r\n<details>\r\n<summary>Create master.key beforehand in custom path</summary>\r\n\r\n```\r\nexport JENKINS_HOME=/tmp/cc\r\nmasterkey=$(mktemp)\r\nopenssl rand -hex 128 >$masterkey\r\njava -Djenkins.master.key.readOnly=true -Djenkins.master.key.file=$masterkey -jar war/target/jenkins.war\r\n```\r\n\r\n\u2705 Normal startup",
+  "base_commit": "092756b83b",
+  "fixed_commit": "314930c242",
+  "additions": 72,
+  "deletions": 12,
+  "source_files": [
+    "core/src/main/java/jenkins/security/DefaultConfidentialStore.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/security/DefaultConfidentialStoreTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "DefaultConfidentialStoreTest",
+  "test_command": "mvn test -pl core -am -Dtest=DefaultConfidentialStoreTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

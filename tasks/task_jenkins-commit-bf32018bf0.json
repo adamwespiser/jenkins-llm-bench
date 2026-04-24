@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-commit-bf32018bf0",
+  "pr": null,
+  "title": "[SECURITY-3512]",
+  "merged_at": "2025-03-25",
+  "issue_text": "Co-authored-by: Kevin-CB <kguerroudj@cloudbees.com>",
+  "base_commit": "dddb4598df",
+  "fixed_commit": "bf32018bf0",
+  "additions": 64,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/ComputerSet.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/Security3512Test.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "Security3512Test",
+  "test_command": "mvn test -pl test -am -Dtest=Security3512Test -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test. No public PR."
+}

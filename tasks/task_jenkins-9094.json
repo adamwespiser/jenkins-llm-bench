@@ -1,0 +1,28 @@
+{
+  "id": "jenkins-9094",
+  "pr": 9094,
+  "title": "Replace usages of `org.apache.commons.lang.StringEscapeUtils` with Guava",
+  "merged_at": "2024-03-30",
+  "issue_text": "Replace the unmaintained Commons Lang 2 functionality with Guava. Note that the Guava functionality is not fully open-source pending https://github.com/google/guava/issues/1620, so I filled in the gap with a Jenkins-specific `SourceCodeEscapers` class and test. Once https://github.com/google/guava/issues/1620 is closed, then this class and test can be deleted in favor of the upstream version.\r\n\r\n### Testing done\r\n\r\nNew unit test passes. In addition, I manually compared the output before and after this PR with realistic data in `ConsoleAnnotationOutputStream` and `PlainTextConsoleOutputStream` and found that there were no changes.\r\n\r\n### Proposed changelog entries\r\n\r\nN/A\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [ ] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [ ] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [ ] For new APIs and ",
+  "base_commit": "47306c20ed",
+  "fixed_commit": "9882ec67f2",
+  "additions": 97,
+  "deletions": 4,
+  "source_files": [
+    "core/src/main/java/jenkins/util/SourceCodeEscapers.java",
+    "core/src/main/java/hudson/console/ConsoleAnnotationOutputStream.java",
+    "core/src/main/java/hudson/console/PlainTextConsoleOutputStream.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/util/SourceCodeEscapersTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "core",
+  "test_class": "SourceCodeEscapersTest",
+  "test_command": "mvn test -pl core -am -Dtest=SourceCodeEscapersTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=new_file. Unit test."
+}

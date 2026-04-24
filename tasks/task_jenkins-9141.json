@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9141",
+  "pr": 9141,
+  "title": "[JENKINS-69588] Stop installed plugins page jumping on load",
+  "merged_at": "2024-04-10",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-69588](https://issues.jenkins.io/browse/JENKINS-69588).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\nSimple fix that works for the general case of sorted by name a-z. I think to do a full fix would need to make this view data-driven (like available plugin page) rather than rendered server side (or passing initial sort order to server side).\r\n\r\nBoth would be a bit more involved but can look at it if people think its worth it.\r\n\r\n\r\n### Testing done\r\n\r\nReproduced previously and couldn't reproduce after.\r\nIt will still jump if someone sorts in reverse or by enabled but I expect thats fairly unlikely for general use.\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verif",
+  "base_commit": "92e137cbfa",
+  "fixed_commit": "d14b380c78",
+  "additions": 22,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/PluginManager.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/PluginManagerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "PluginManagerTest",
+  "test_command": "mvn test -pl test -am -Dtest=PluginManagerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

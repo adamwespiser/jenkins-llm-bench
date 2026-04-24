@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9653",
+  "pr": 9653,
+  "title": "[JENKINS-73687] Make deserialization of `Map` fields in XML files more robust",
+  "merged_at": "2024-09-13",
+  "issue_text": "See [JENKINS-73687](https://issues.jenkins.io/browse/JENKINS-73687).\r\n\r\nI was recently made aware of a change in `hashicorp-vault` plugin that accidentally broke serial compatibility of a folder property in a way that unexpectedly caused the folder to become very corrupted after deserialization. See https://github.com/jenkinsci/hashicorp-vault-plugin/issues/326#issuecomment-2307757372 for details, but the summary is that `config.xml` for the folder had an element for a map which looked like this associated with a field of type `Map<String, Calendar>`, which is not correct.\r\n\r\n```\r\n<tokenExpiry>\r\n  <time>1724357123299</time>\r\n  <timezone>America/New_York</timezone>\r\n</tokenExpiry>\r\n```\r\n\r\nThe correct format would have been something like this:\r\n\r\n```\r\n<tokenExpiry>\r\n  <entry>\r\n    <string>key</string>\r\n    <gregorian-calendar>\r\n      <time>1724357123299</time>\r\n      <timezone>America/New_York</timezone>\r\n    </gregorian-calendar>\r\n  </entry>\r\n</tokenExpiry>\r\n```\r\n\r\nThis led to a bare `RuntimeException` being thrown [here](https://github.com/x-stream/xstream/blob/f124f777fb8831430f930816a9e18813788c69cb/xstream/src/java/com/thoughtworks/xstream/io/xml/AbstractPullReader.java#L105) as a result of this call, which expects that it has just read the `<entry>` element and needs to move down to read the key, but in this case has in fact just read the element named `<time>`, and so there are no children to read:\r\n\r\nhttps://github.com/jenkinsci/jenkins/blob/fb09eafb02ead56b93620b9f47cbb22a43b8eb70/core/src/main/java/hudson/util/RobustMapConverter.java#L67\r\n\r\nSince this is a `RuntimeException`, it actually escapes quite far up through the converter hierarchy until it is caught [here](https://github.com/x-stream/xstream/blob/8472df83122b6b0840fc6d8c7945b5b55c25fb9d/xstream/src/java/com/thoughtworks/xstream/core/TreeUnmarshaller.java#L81) and then the wrapped exception is caught in `RobustReflectionConverter.doUnmarshal`, but at that point things go pretty badly wrong and the c",
+  "base_commit": "d5271c8d2f",
+  "fixed_commit": "dab6597416",
+  "additions": 52,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/util/RobustMapConverter.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/util/RobustMapConverterTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "RobustMapConverterTest",
+  "test_command": "mvn test -pl core -am -Dtest=RobustMapConverterTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

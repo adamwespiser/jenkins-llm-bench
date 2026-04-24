@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10630",
+  "pr": 10630,
+  "title": "Set `SameSite` attribute on cookies",
+  "merged_at": "2025-05-30",
+  "issue_text": "This implements additional protection from some CSRF vulnerabilities.\r\n\r\nDocs: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies#controlling_third-party_cookies_with_samesite\r\n\r\n### Testing done\r\n\r\nNone, <s>I expect PCT/ATH to fail with some SSO security realm plugins.</s> No tests failed \ud83c\udf89\r\n\r\nIn manual testing https://plugins.jenkins.io/saml/ no longer redirects to the page you were on previously, as that was done through a session attribute read when processing `POST \u2026/finishLogin`. This is being fixed by https://github.com/jenkinsci/saml-plugin/pull/514.\r\n\r\n### Proposed changelog entries\r\n\r\n- When running in Jetty (when using `java -jar jenkins.war`, the default), set the `SameSite` attribute for cookies to provide additional protection from some CSRF vulnerabilities. By default this sets the attribute to `Lax`. This can be changed by setting the Java system property `jenkins.security.JettySameSiteCookieSetup.sameSiteDefault`.\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\r\nFor examples, see: https://www.jenkins.io/changelog/\r\n\r\nDo not include the Jira issue in the changelog entry.\r\nInclude the Jira issue in the description of the pull request so that the changelog generator can find it and include it in the generated changelog.\r\n\r\nYou may add multiple changelog entries if applicable by adding a new entry to the list, e.g.\r\n- First changelog entry\r\n- Second changelog entry\r\n-->\r\n\r\n### Proposed changelog category\r\n\r\n/label rfe\r\n\r\n<!--\r\nThe changelog entry needs to have a category which is selected based on the label.\r\nIf there's no changelog then the label should be `skip-changelog`.\r\n\r\nThe available categories are:\r\n* bug - Minor bug. Will be listed after features\r\n* developer - Changes which impact plugin developers\r\n* dependencies - Pull requests that update a dependency\r\n* internal - Internal only change, not user facing\r\n* into-lts - Changes tha",
+  "base_commit": "05813474ae",
+  "fixed_commit": "6247ca06f9",
+  "additions": 117,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/jenkins/security/JettySameSiteCookieSetup.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/JettySameSiteCookieSetupTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "JettySameSiteCookieSetupTest",
+  "test_command": "mvn test -pl test -am -Dtest=JettySameSiteCookieSetupTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

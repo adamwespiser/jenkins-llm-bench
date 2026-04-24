@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-6865",
+  "pr": 6865,
+  "title": "[JENKINS-60866][JENKINS-71513] Apply Stapler update for CSP-compliant st:bind and renderOnDemand",
+  "merged_at": "2024-02-24",
+  "issue_text": "See [JENKINS-60866](https://issues.jenkins.io/browse/JENKINS-60866).\r\n\r\nDownstream of https://github.com/jenkinsci/stapler/pull/385\r\n\r\nThis takes care of two different previously inline or `eval`'ed JS snippets that ended up calling `makeStaplerProxy` to bind objects to JS:\r\n\r\n* `st:bind` emitted a `script` tag with inline script that assigns the result of `makeStaplerProxy` to a variable (if used with a variable name -- the other mode cannot be fixed, as it's intended for nesting in an inline script).\r\n* `renderOnDemand.jelly` added the `makeStaplerProxy` call it needed to an HTML attribute, later `eval`'ing it in https://github.com/jenkinsci/jenkins/blob/d977ee8741ed6362dac282e69a317a070ee9d813/war/src/main/webapp/scripts/hudson-behavior.js#L793\r\n\r\nThis PR changes Stapler and Jenkins to no longer need either:\r\n\r\n* `st:bind` now emits `script` tags with `src`. Stapler has been improved to have a separate URL that provides the previously inline script standalone.\r\n* `renderOnDemand` now adds HTML attributes for the function name and its argument values, which are then read in `hudson-behavior.js` and used to invoke the specified method with the correct arguments.\r\n\r\n### Testing notes\r\n\r\n* `st:bind` is used in core by `progressiveRendering`, which is used by [the \"Build History\" view](https://ci.jenkins.io/builds).\r\n* `renderOnDemand` is used whenever a form has nontrivial dynamic content (e.g. adding build steps to a freestyle job, or the configuration of a security realm, authorization strategy, or markup formatter after selecting the type in a dropdown box.\r\n\r\n### Proposed changelog entries\r\n\r\n* Developer: Update Stapler from 1822.v120278426e1c to 1839.ved17667b_a_eb_5 to no longer generate line JavaScript with Stapler bound objects to improve compatibility with Content-Security-Policy Plugin\r\n\r\n<!-- Comment: \r\nThe changelogs will be integrated by the core maintainers after the merge.\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"re",
+  "base_commit": "885978daf0",
+  "fixed_commit": "64607784f8",
+  "additions": 253,
+  "deletions": 3,
+  "source_files": [
+    "core/src/main/java/hudson/Functions.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/org/kohsuke/stapler/BindTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "BindTest",
+  "test_command": "mvn test -pl test -am -Dtest=BindTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

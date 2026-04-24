@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-8912",
+  "pr": 8912,
+  "title": "[JENKINS-72627] Improve locale parsing for loading of localised help files",
+  "merged_at": "2024-02-02",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-72627](https://issues.jenkins.io/browse/JENKINS-72627).\r\n\r\n### Testing done\r\n\r\nAdd some automated unit testing.\r\n\r\nAlso, manually tested it.\r\n\r\n1. Install [dingtalk plugin](https://plugins.jenkins.io/dingding-notifications/), version `2.7.1`\r\n2. run cmd `curl -H \"Accept-Language:zh,zh-CN;q=0.9,en;q=0.8\" http://localhost:8080/jenkins/descriptor/io.jenkins.plugins.DingTalkRobotConfig/help/id`\r\n\r\nBefore modify, return 404 page\r\nAfter modify, return `help-id_zh_CN.html` text.\r\n```\r\n\u673a\u5668\u4eba id\uff0c\u53ef\u4ee5\u5728 pipeline \u4e2d\u4f7f\u7528\uff1b\u7559\u7a7a\u4f1a\u81ea\u52a8\u751f\u6210\uff0c\u624b\u52a8\u586b\u5199\u8bf7\u4fdd\u8bc1\u552f\u4e00\u6027\r\n```\r\n\r\nPS: Because the `help-id_zh_CN.html` file is missing in version `2.7.1` of `dingtalk-plugin` , It is reasonable to return a 404 before modify.\r\n\r\n```\r\n# in ~/dingtalk-plugin/src/main on git:main x [12:31:30] \r\n$ tree resources \r\nresources\r\n\u251c\u2500\u2500 index.jelly\r\n\u2514\u2500\u2500 io\r\n    \u2514\u2500\u2500 jenkins\r\n        \u2514\u2500\u2500 plugins\r\n ...\r\n            \u251c\u2500\u2500 DingTalkRobotConfig\r\n            \u2502\u00a0\u00a0 \u251c\u2500\u2500 config.jelly\r\n            \u2502\u00a0\u00a0 \u251c\u2500\u2500 help-id_zh_CN.html\r\n            \u2502\u00a0\u00a0 \u251c\u2500\u2500 help-key_zh_CN.html\r\n            \u2502\u00a0\u00a0 \u2514\u2500\u2500 help-name_zh_CN.html\r\n\r\n```\r\n\r\n### Proposed changelog entries\r\n\r\n- JENKINS-72627, Improve locale parsing for loading of localised help files\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require ex",
+  "base_commit": "ed84a4ba34",
+  "fixed_commit": "abf3b41ab3",
+  "additions": 238,
+  "deletions": 11,
+  "source_files": [
+    "core/src/main/java/hudson/model/Descriptor.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/GetLocaleStaticHelpUrlTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "core",
+  "test_class": "GetLocaleStaticHelpUrlTest",
+  "test_command": "mvn test -pl core -am -Dtest=GetLocaleStaticHelpUrlTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Unit test."
+}

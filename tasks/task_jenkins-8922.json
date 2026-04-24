@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-8922",
+  "pr": 8922,
+  "title": "[JENKINS-72636] Prevent authenticated access to Resource Root URL",
+  "merged_at": "2024-02-02",
+  "issue_text": "Resource Root URL is for unauthenticated use, that's the entire point of it. Authenticated access means something has gone wrong, so prevent it.\r\n\r\nSee [JENKINS-72636](https://issues.jenkins.io/browse/JENKINS-72636).\r\n\r\n\r\n### Testing done\r\n\r\nBasically what the autotests confirm: `curl -u admin:token` or `curl -u admin:pwd` get HTTP 400 errors.\r\n\r\n### Proposed changelog entries\r\n\r\n- Prevent authenticated access to Resource Root URL\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [ ] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [ ] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [ ] For new APIs and extension points, there is a link to at least one consumer.\r\n```\r\n\r\n### Desired reviewers\r\n\r\n@mention\r\n\r\n<!-- Comment:\r\nIf you need an accelerated review process by the community (e.g., for critical bugs), mention @jenkinsci/core-pr-reviewers.\r",
+  "base_commit": "81679b4598",
+  "fixed_commit": "3ad945f7f3",
+  "additions": 28,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/jenkins/security/ResourceDomainRootAction.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/ResourceDomainTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ResourceDomainTest",
+  "test_command": "mvn test -pl test -am -Dtest=ResourceDomainTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

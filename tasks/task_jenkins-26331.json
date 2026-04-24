@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-26331",
+  "pr": 26331,
+  "title": "Encode log recorder name when redirecting",
+  "merged_at": "2026-02-20",
+  "issue_text": "Fixes #26318\n\n### Testing done\n\n- Added a regression test `createLogRecorderWithNonAsciiName` in `LogRecorderManagerTest`.\n- The test creates a log recorder named `Journal d\u2019acc\u00e8s` and verifies that the configure URL resolves with an encoded path segment.\n- CI builds are running for full validation.\n\n### Screenshots (UI changes only)\n\n#### Before\n\nN/A (no UI layout change)\n\n#### After\n\nN/A (no UI layout change)\n\n### Proposed changelog entries\n\n- Redirect to the correct URL when creating log recorders with non-ASCII names.\n\n### Proposed changelog category\n\n/label bug\n\n### Proposed upgrade guidelines\n\nN/A\n\n### Submitter checklist\n\n- [x] The issue, if it exists, is well-described.\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\n- [x] There is automated testing or an explanation as to why this change has no tests.\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate. (No new public API in this PR.)\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable. (No new deprecations in this PR.)\n- [x] UI changes do not introduce regressions when enforcing the current default rules of [Content Security Policy Plugin](https://plugins.jenkins.io/csp/). In particular, new or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)). (No JS/UI behavior change in this PR.",
+  "base_commit": "940f22a3ca",
+  "fixed_commit": "3329d5d06c",
+  "additions": 15,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/logging/LogRecorderManager.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/logging/LogRecorderManagerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "LogRecorderManagerTest",
+  "test_command": "mvn test -pl test -am -Dtest=LogRecorderManagerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

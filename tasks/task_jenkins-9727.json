@@ -1,0 +1,30 @@
+{
+  "id": "jenkins-9727",
+  "pr": 9727,
+  "title": "[JENKINS-63343] Validate element types for collections and maps when deserializing XML files",
+  "merged_at": "2024-10-11",
+  "issue_text": "See [JENKINS-63343](https://issues.jenkins.io/browse/JENKINS-63343). This PR checks all fields being deserialized to see if they will be handled by `RobustCollectionConverter` or `RobustMapConverter`, and if so, it explicitly constructs an instance of the converter specialized to the type of the field in question so that collection elements and map keys and values can be type checked. Any values which do not have the expected type are ignored, and an `OldDataMonitor` warning is logged. \n\n<!-- Comment:\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\n\n * We do not require Jira issues for minor improvements.\n * Bug fixes should have a Jira issue to facilitate the backporting process.\n * Major new features should have a Jira issue.\n-->\n\n### Testing done\n\nSee new automated tests.\n\n<!-- Comment:\nProvide a clear description of how this change was tested.\nAt minimum this should include proof that a computer has executed the changed lines.\nIdeally this should include an automated test or an explanation as to why this change has no tests.\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\n-->\n\n### Proposed changelog entries\n\n- Ignore values with incorrect types when deserializing collections and maps in XML files.\n\n<!-- Comment:\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\nFor examples, see: https://www.jenkins.io/changelog/\n\nDo not include the Jira issue i",
+  "base_commit": "857253eeaa",
+  "fixed_commit": "6651e8531e",
+  "additions": 396,
+  "deletions": 20,
+  "source_files": [
+    "core/src/main/java/hudson/util/RobustCollectionConverter.java",
+    "core/src/main/java/hudson/util/RobustMapConverter.java",
+    "core/src/main/java/hudson/util/RobustReflectionConverter.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/util/RobustCollectionConverterTest.java",
+    "core/src/test/java/hudson/util/RobustMapConverterTest.java",
+    "core/src/test/java/hudson/util/RobustReflectionConverterTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "RobustCollectionConverterTest",
+  "test_command": "mvn test -pl core -am -Dtest=RobustCollectionConverterTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=modified_with_new_methods. Unit test."
+}

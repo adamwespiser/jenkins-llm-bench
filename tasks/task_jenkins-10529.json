@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10529",
+  "pr": 10529,
+  "title": "Ensures the Jenkins master computer number of executors is set appropriately",
+  "merged_at": "2025-04-11",
+  "issue_text": "PR #10494 caused a small regression in CloudBees CI context.\r\n\r\nAmends #10494\r\n\r\nWhen calling `Jenkins#load`, the number of executors of the associated `MasterComputer` was not updated accordingly anymore in case the on-disk number of executor was updated.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-XXXXX](https://issues.jenkins.io/browse/JENKINS-XXXXX).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\nModified the number of executors on the built-in node in the config.xml file then reloaded the configuration from the \"Manage Jenkins\" page and confirmed that the changes made in the file were visible in the running controller.\r\n\r\nModified the number of executors on the built-in node from the \"Manage Jenkins\" page and confirmed that the changes were immediately written to the config.xml file.\r\n\r\n### Proposed changelog entries\r\n\r\n- Ensure number of executors of the built-in node is synced with the number of executors defined in Jenkins after a configuration reload.\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\r\nFor examples, see: https://www.jenkins.io/changelog/\r\n\r\nDo not include the Jira issue in the changelog entry.\r\nInclude the Jira issue in the description of the pull request so that the changelog generator can find it and include it in the generated changelog.\r\n\r\nYou may add multiple c",
+  "base_commit": "ec494bd661",
+  "fixed_commit": "4912994f35",
+  "additions": 13,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/jenkins/model/Jenkins.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/JenkinsReloadConfigurationTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "JenkinsReloadConfigurationTest",
+  "test_command": "mvn test -pl test -am -Dtest=JenkinsReloadConfigurationTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

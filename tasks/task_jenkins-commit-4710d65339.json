@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-commit-4710d65339",
+  "pr": null,
+  "title": "[SECURITY-783]",
+  "merged_at": "2025-12-02",
+  "issue_text": "[SECURITY-783]",
+  "base_commit": "1366fa95df",
+  "fixed_commit": "4710d65339",
+  "additions": 292,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/hudson/model/BuildAuthorizationToken.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/BuildAuthorizationTokenMigrationTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "BuildAuthorizationTokenMigrationTest",
+  "test_command": "mvn test -pl test -am -Dtest=BuildAuthorizationTokenMigrationTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test. No public PR."
+}

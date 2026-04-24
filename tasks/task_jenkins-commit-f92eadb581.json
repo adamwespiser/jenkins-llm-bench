@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-commit-f92eadb581",
+  "pr": null,
+  "title": "[SECURITY-3658]",
+  "merged_at": "2026-02-15",
+  "issue_text": "[SECURITY-3658]",
+  "base_commit": "f067d469e6",
+  "fixed_commit": "f92eadb581",
+  "additions": 300,
+  "deletions": 55,
+  "source_files": [
+    "core/src/main/java/hudson/model/RunParameterValue.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/RunParameterValueTest.java",
+    "test/src/test/java/jenkins/security/Security3658Test.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "RunParameterValueTest",
+  "test_command": "mvn test -pl test -am -Dtest=RunParameterValueTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test. No public PR."
+}

@@ -1,0 +1,29 @@
+{
+  "id": "jenkins-8979",
+  "pr": 8979,
+  "title": "`Nodes` persistence cleanup, APIs to control loading",
+  "merged_at": "2024-03-05",
+  "issue_text": "When running CloudBees CI in high availability mode we need to control which agents are loaded from disk: blocking some from being loaded at startup, loading them later, reloading them from disk, unloading them from memory while they remain on disk. The four new methods here allow that level of fine-grained control. By default the behavior remains unchanged, of course: the list of agents in memory matches the contents of the `nodes` directory.\r\n\r\n### Testing done\r\n\r\nExercised by various functional tests in CloudBees CI.\r\n\r\n### Proposed changelog entries\r\n\r\n- Add experimental APIs to control which agents are loaded and when.\r\n\r\n### Proposed upgrade guidelines\r\n\r\n- N/A\r\n\r\nBefore the changes are marked as `ready-for-merge`:\r\n\r\n```[tasklist]\r\n### Maintainer checklist\r\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\r\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\r\n- [ ] Changelog entries in the pull request title and/or **Proposed changelog entries** are accurate, human-readable, and in the imperative mood.\r\n- [ ] Proper changelog labels are set so that the changelog can be generated automatically.\r\n- [ ] If the change needs additional upgrade steps from users, the `upgrade-guide-needed` label is set and there is a **Proposed upgrade guidelines** section in the pull request title (see [example](https://github.com/jenkinsci/jenkins/pull/4387)).\r\n- [ ] If it would make sense to backport the change to LTS, a Jira issue must exist, be a _Bug_ or _Improvement_, and be labeled as `lts-candidate` to be considered (see [query](https://issues.jenkins.io/issues/?filter=12146)).\r\n```",
+  "base_commit": "bd37089adf",
+  "fixed_commit": "13c86eeaf6",
+  "additions": 247,
+  "deletions": 77,
+  "source_files": [
+    "core/src/main/java/hudson/model/Node.java",
+    "core/src/main/java/jenkins/model/Jenkins.java",
+    "core/src/main/java/jenkins/model/NodeListener.java",
+    "core/src/main/java/jenkins/model/Nodes.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/NodesTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "NodesTest",
+  "test_command": "mvn test -pl test -am -Dtest=NodesTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-25980",
+  "pr": 25980,
+  "title": "[JENKINS-75905] Include update site URL in signature verification in error messages",
+  "merged_at": "2025-12-29",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace <issue-number> with the issue number.\r\n-->\r\n\r\nFixes #16784\r\n\r\nThis change improves the readability of signature verification error messages in the plugin manager UI.\r\n\r\n- The update site URL is appended to error messages provide context.\r\n- Users now see a concise message in the UI instead of a confusing error box dominated by stack trace details.\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in the issue tracker, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require an issue for minor improvements.\r\n * Major new features should have an issue created.\r\n-->\r\n\r\n### Testing done\r\n- Added a unit test in UpdateSiteTest that simulates a signature verification failure.\r\n- Verified that the resulting FormValidation error message contains the update site URL.\r\n- Manually started Jenkins with a test update site containing an invalid signature as the original issue. Verified in the plugin manager UI that the error message is concise and includes the URL.\r\n\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\r\n-->\r\n\r\n### Screenshots (UI changes only)\r\n\r\n<!--\r\nIf your change involves a UI change, please include screenshots showin",
+  "base_commit": "474f2aa295",
+  "fixed_commit": "e0f83edfc3",
+  "additions": 126,
+  "deletions": 2,
+  "source_files": [
+    "core/src/main/java/hudson/model/UpdateSite.java",
+    "core/src/main/java/jenkins/util/JSONSignatureValidator.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/UpdateSiteTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "UpdateSiteTest",
+  "test_command": "mvn test -pl test -am -Dtest=UpdateSiteTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

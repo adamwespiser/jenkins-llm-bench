@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-commit-5d26b53ad3",
+  "pr": null,
+  "title": "[SECURITY-3430]",
+  "merged_at": "2024-07-30",
+  "issue_text": "[SECURITY-3430]",
+  "base_commit": "a0844df906",
+  "fixed_commit": "5d26b53ad3",
+  "additions": 425,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/jenkins/security/s2m/JarURLValidatorImpl.java",
+    "core/src/main/java/hudson/PluginManager.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/Security3430Test.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "Security3430Test",
+  "test_command": "mvn test -pl test -am -Dtest=Security3430Test -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=new_file. Integration test. No public PR."
+}

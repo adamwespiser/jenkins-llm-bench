@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10756",
+  "pr": 10756,
+  "title": "When a pending item lost its executor, it should be rescheduled",
+  "merged_at": "2025-06-28",
+  "issue_text": "Otherwise the task is lost forever.\r\n\r\n@jglick noticed it in https://github.com/jenkinsci/jenkins/blob/fdb1dc9e7478c0cfe5d11e464ca7d53d8a6331f9/core/src/main/java/hudson/model/Queue.java#L1535 but the implementation has been wrong forever.\r\n\r\nIf a computer gets disconnected just at the same time a task gets assigned to one of its executor, https://github.com/jenkinsci/jenkins/blob/7f969d02171209187b144a29cc41c448a7c9442f/core/src/main/java/hudson/model/Executor.java#L367 appears in system logs, but the corresponding queue item gets lost and you can observe higher level symptoms such as\r\n```\r\nERROR: node block appears to be neither running nor scheduled; will cancel if this condition persists\r\nERROR: node block still appears to be neither running nor scheduled; cancelling\r\n```\r\nin pipeline logs.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-XXXXX](https://issues.jenkins.io/browse/JENKINS-XXXXX).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not ",
+  "base_commit": "ea2f421cf6",
+  "fixed_commit": "e8ea2ff25f",
+  "additions": 76,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/model/Executor.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/QueueTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "QueueTest",
+  "test_command": "mvn test -pl test -am -Dtest=QueueTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

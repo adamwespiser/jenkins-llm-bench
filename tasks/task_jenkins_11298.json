@@ -1,0 +1,21 @@
+{
+  "id": "jenkins-11298",
+  "pr": 11298,
+  "title": "[JENKINS-45927] Truncate verbose CauseOfBlockage messages in queue",
+  "issue_text": "When multiple nodes reject a build task, CompositeCauseOfBlockage.getShortDescription() joins ALL rejection reasons with \"; \", causing extremely verbose queue tooltips that can fill the entire browser window.\n\nFix: Modify CompositeCauseOfBlockage to show only the first 5 reasons, followed by \"... and N more\" when there are more than 5 reasons.\n\nThe class is at: core/src/main/java/jenkins/model/queue/CompositeCauseOfBlockage.java\nThe method to fix is: getShortDescription()",
+  "base_commit": "9878d67e8b",
+  "fixed_commit": "f075bc05f7",
+  "source_files": [
+    "core/src/main/java/jenkins/model/queue/CompositeCauseOfBlockage.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/model/queue/CompositeCauseOfBlockageTest.java"
+  ],
+  "maven_module": "core",
+  "test_class": "CompositeCauseOfBlockageTest",
+  "test_command": "mvn test -pl core -am -Dtest=CompositeCauseOfBlockageTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "easy",
+  "notes": "Test file is new in this PR; injected into base worktree. Pure unit test, no JenkinsRule needed."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-8908",
+  "pr": 8908,
+  "title": "[JENKINS-71700] avoid stacktrace from artifactarchiver when no artifacts are found",
+  "merged_at": "2024-02-01",
+  "issue_text": "When the validateAntFileMask fails because there are too many files or it takes too long an exception is thrown that was intended to be catched in the ArtifactArchiver. The fix in https://github.com/jenkinsci/jenkins/pull/6475 only considered builds running on the controller, but when the build happens on an agent, this didn't work as the exception is deeply wrapped in 2 other exceptions.\r\nAs printing the exception message is of no real help, just catch all exceptions and print them to the jenkins log but not the build log. Any other message might just be misleading as one could get the impression that jenkins stopped after looking at 10000 files and only because of this no files where archived but this is not the case. At this place the ArtifactArchiver is just trying to give a hint why it didn't archive anything.\r\n\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-71700](https://issues.jenkins.io/browse/JENKINS-71700).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\nAdded unit test.\r\n\r\nManual testing\r\n- open script console and run `hudson.FilePath.VALIDATE_ANT_FILE_MASK_BOUND=1`\r\n- create freestyle job that writes 2 files to the workspace and add an archiveArtifact post build step that will not match any of the files\r\n\r\nBefore\r\nCase 1: job runs on controller:\r\nThis creates the following output:\r\n```\r\n18:04:20 Archiving artifacts\r\n18:04:21 no matches found within 1\r\n18:04:21 ERROR: Step \u2018Archiv",
+  "base_commit": "ddf68d3874",
+  "fixed_commit": "ef378cc38d",
+  "additions": 43,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/hudson/tasks/ArtifactArchiver.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/tasks/ArtifactArchiverTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ArtifactArchiverTest",
+  "test_command": "mvn test -pl test -am -Dtest=ArtifactArchiverTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

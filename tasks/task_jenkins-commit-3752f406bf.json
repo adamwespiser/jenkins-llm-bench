@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-commit-3752f406bf",
+  "pr": null,
+  "title": "[SECURITY-3349]",
+  "merged_at": "2024-07-30",
+  "issue_text": "[SECURITY-3349]",
+  "base_commit": "5d26b53ad3",
+  "fixed_commit": "3752f406bf",
+  "additions": 103,
+  "deletions": 2,
+  "source_files": [
+    "core/src/main/java/hudson/model/MyViewsProperty.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/Security3349Test.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "Security3349Test",
+  "test_command": "mvn test -pl test -am -Dtest=Security3349Test -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test. No public PR."
+}

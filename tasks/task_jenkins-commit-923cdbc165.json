@@ -1,0 +1,29 @@
+{
+  "id": "jenkins-commit-923cdbc165",
+  "pr": null,
+  "title": "[SECURITY-3495][SECURITY-3496]",
+  "merged_at": "2025-02-25",
+  "issue_text": "[SECURITY-3495][SECURITY-3496]",
+  "base_commit": "4a9a3ecd08",
+  "fixed_commit": "923cdbc165",
+  "additions": 204,
+  "deletions": 4,
+  "source_files": [
+    "core/src/main/java/hudson/cli/GetNodeCommand.java",
+    "core/src/main/java/hudson/cli/GetViewCommand.java",
+    "core/src/main/java/hudson/model/Computer.java",
+    "core/src/main/java/hudson/model/View.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/lib/form/PasswordTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "PasswordTest",
+  "test_command": "mvn test -pl test -am -Dtest=PasswordTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test. No public PR."
+}

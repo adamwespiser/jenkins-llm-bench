@@ -1,0 +1,31 @@
+{
+  "id": "jenkins-7037",
+  "pr": 7037,
+  "title": "[JENKINS-14789] Configurable interval for computer retention check",
+  "merged_at": "2024-06-18",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue's id you created on JIRA.\r\nPlease note that if you want your changes backported into LTS, you will need to create a JIRA ticket for it. Read https://www.jenkins.io/download/lts/#backporting-process for more.\r\n-->\r\n\r\nSee [JENKINS-14789](https://issues.jenkins.io/browse/JENKINS-14789).\r\nSplit from #5725 \r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in the ticket, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require JIRA issues for minor improvements.\r\n * Bugfixes should have a JIRA issue (backporting process).\r\n * Major new features should have a JIRA issue reference.\r\n-->\r\n\r\nThe new config entry has been placed below the configuration of executors on the jenkins master.\r\n\r\n![image](https://user-images.githubusercontent.com/17931887/186952487-66df8f73-31f1-41e1-9e73-f6ccfb9b2b0b.png)\r\n\r\nI've considered putting the new option under the `/manage/computer/` namespace, but there is no existing configuration (page) that can be extended for this purpose. The config file for `/manage/computer/configure` is `/var/lib/jenkins/nodeMonitors.xml`  and it contains a list of `hudson.node_monitors.NodeMonitor` classes.\r\n\r\nReconfiguration at run-time is possible. Cancellation of the previous cycle is done on a best effort basis by cancelling the previous timer. (Awaiting the completion of old task throws an `IllegalMonitorStateException` and synchronizing is not possible as the task variable is not final. Concurrent runs are OK, so I did not bother ensuring no concurrency.) See my inline comment on why concurrent runs are OK:\r\n\r\n>     * Restart the periodic check.\r\n>     * The previous run may still be pending. We do not need to wait for its completion as all calls of\r\n>     * {@link RetentionStrategy#check} inside the runner are performed in a queue with a lock.\r\n>     * Per the docs on {@link RetentionStrategy#check}, it ",
+  "base_commit": "04874323c8",
+  "fixed_commit": "16b5d21052",
+  "additions": 260,
+  "deletions": 12,
+  "source_files": [
+    "core/src/main/java/jenkins/model/GlobalComputerRetentionCheckIntervalConfiguration.java",
+    "core/src/main/java/hudson/slaves/CloudRetentionStrategy.java",
+    "core/src/main/java/hudson/slaves/CloudSlaveRetentionStrategy.java",
+    "core/src/main/java/hudson/slaves/ComputerRetentionWork.java",
+    "core/src/main/java/hudson/slaves/RetentionStrategy.java",
+    "core/src/main/java/hudson/slaves/SimpleScheduledRetentionStrategy.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/GlobalComputerRetentionCheckIntervalConfigurationTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "GlobalComputerRetentionCheckIntervalConfigurationTest",
+  "test_command": "mvn test -pl test -am -Dtest=GlobalComputerRetentionCheckIntervalConfigurationTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "6 source file(s), signal=new_file. Integration test."
+}

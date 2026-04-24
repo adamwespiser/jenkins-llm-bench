@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-25918",
+  "pr": 25918,
+  "title": "Remove IP address from DefaultCrumbIssuer",
+  "merged_at": "2025-12-18",
+  "issue_text": "Fixes https://github.com/jenkinsci/jenkins/issues/18841.\r\n\r\nPossibly https://github.com/jenkinsci/jenkins/issues/23910 as well.\r\n\r\nThis deliberately does not yet remove the Crumb Issuer section from the Security configuration form (since now there's nothing left to configure if there's only the default crumb issuer). That can be a followup change.\r\n\r\n### Testing done\r\n\r\nBasic interactive tests. Submitting configuration works. If the `EXCLUDE_SESSION_ID` flag is set, warning gets logged on config and startup. Both buttons in the admin monitor work as expected.\r\n\r\n### Proposed changelog entries\r\n\r\n- No longer include the client IP address in CSRF protection token (\"crumb\") calculation. Effectively, the behavior is the same as if the (now removed) \"Enable proxy compatibility\" option were always checked.\r\n- Show a warning to administrators who set the `hudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID` flag, informing them of the further reduced safety, and the option's planned future removal.\r\n\r\n### Proposed changelog category\r\n\r\n/label rfe\r\n\r\n<!--\r\nThe changelog entry needs to have a category which is selected based on the label.\r\nIf there's no changelog then the label should be `skip-changelog`.\r\n\r\nThe available categories are:\r\n* bug - Minor bug. Will be listed after features\r\n* developer - Changes which impact plugin developers\r\n* dependencies - Pull requests that update a dependency\r\n* internal - Internal only change, not user facing\r\n* into-lts - Changes that are backported to the LTS baseline\r\n* localization - Updates localization files\r\n* major-bug - Major bug. Will be highlighted on the top of the changelog\r\n* major-rfe - Major enhancement. Will be highlighted on the top\r\n* rfe - Minor enhancement\r\n* regression-fix - Fixes a regression in one of the previous Jenkins releases\r\n* removed - Removes a feature or a public API\r\n* skip-changelog - Should not be shown in the changelog\r\n\r\nNon-changelog categories:\r\n* web-ui - Changes in the web UI\r\n\r\nNon-chang",
+  "base_commit": "587983b3d5",
+  "fixed_commit": "07d2ff18a4",
+  "additions": 204,
+  "deletions": 369,
+  "source_files": [
+    "core/src/main/java/hudson/security/csrf/DefaultCrumbIssuer.java",
+    "core/src/main/java/hudson/security/csrf/GlobalCrumbIssuerConfiguration.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/security/csrf/DefaultCrumbIssuerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "DefaultCrumbIssuerTest",
+  "test_command": "mvn test -pl test -am -Dtest=DefaultCrumbIssuerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

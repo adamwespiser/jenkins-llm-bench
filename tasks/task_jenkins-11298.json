@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-11298",
+  "pr": 11298,
+  "title": "[JENKINS-45927] Truncate verbose CauseOfBlockage messages in queue",
+  "merged_at": "2025-12-13",
+  "issue_text": "See [JENKINS-45927](https://issues.jenkins.io/browse/JENKINS-45927)\r\n\r\n### Testing done\r\n\r\nAdded comprehensive unit tests in `CompositeCauseOfBlockageTest`:\r\n- Few reasons (no truncation)\r\n- Exactly 5 reasons (boundary case)\r\n- More than 5 reasons (truncation)\r\n- 100 reasons (extreme case, verifies length is reasonable)\r\n\r\n### Proposed changelog entries\r\n\r\n- Truncate verbose queue blockage messages to show maximum 5 reasons with \"... and N more\" suffix.\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [x] The Jira issue, [JENKINS-45927](https://issues.jenkins.io/browse/JENKINS-45927), is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, methods, and fields are annotated with `@Restricted` or have `@since TODO` Javadoc.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")`.\r\n- [ ] New or fixed UI is crresponsible to Content Security Policy defaults.\r\n- [ ] If dependency changes, these were updated to link to relevant changelogs.\r\n- [ ] If new extension/APIs were added, there is link to its consumers.\r\n\r\n### Desired reviewers\r\n\r\n@timja\r\n\r\nBefore the changes are marked as `ready-for-merge`:\r\n\r\n### Maintainer checklist\r\n\r\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\r\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\r\n- [ ] Changelog entries in the pull request title and/or **Proposed changelog entries** are accurate, human-readable, and in the imperative mood.\r\n- [ ] Proper changelog labels are set so that the changelog can be generated automatically.\r\n- [ ] If the change needs additional upgrade steps from users, the `upgrade-guide-needed` labe",
+  "base_commit": "9878d67e8b",
+  "fixed_commit": "f075bc05f7",
+  "additions": 115,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/jenkins/model/queue/CompositeCauseOfBlockage.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/model/queue/CompositeCauseOfBlockageTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "core",
+  "test_class": "CompositeCauseOfBlockageTest",
+  "test_command": "mvn test -pl core -am -Dtest=CompositeCauseOfBlockageTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Unit test."
+}

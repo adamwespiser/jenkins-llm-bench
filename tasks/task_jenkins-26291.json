@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-26291",
+  "pr": 26291,
+  "title": "Fix link to polling log of upstream build caused by an SCM trigger after a Jenkins restart",
+  "merged_at": "2026-02-18",
+  "issue_text": "fixes #21106\r\n\r\nWhen a run was caused by an upstream change that itself was triggered by an SCMTriggerCause, the link on the run to the pollingLog of the upstream build was lost after a Jenkins restart.\r\nThe root cause of the problem is the fix for #23334 which removed the `onLoad(Run build)` from the upstream cause which effectively prevents loading of upstream causes after a restart. The `onLoad(Job, job, int buildNumber)` was then actually never called.\r\nThe fix should not reintroduce the issue from #23334, as the `DeeplyNestedUpstreamCause` will at one point jump in and prevent further loading of more builds.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace <issue-number> with the issue number.\r\n-->\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in the issue tracker, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require an issue for minor improvements.\r\n * Major new features should have an issue created.\r\n-->\r\n\r\n### Testing done\r\nAdded a test that fails without the fix and succeeds afterwards.\r\nAlso verified manually:\r\n1. Create a job `downstream` that does nothing\r\n2. Create a job `upstream`, that uses Git SCM with any small github project\r\n3. add a post build step that triggers a build of downstream\r\n4. configured Poll SCM to run every minute\r\n5. wait for the `upstream` and `downstream` jobs to have run\r\n6. The downstream build now has a working link in it's SCMTrigger cause\r\n7. Restart Jenkins and visit the downstream build\r\n8. The downstream build still has a working link in it's SCMTrigger cause\r\n\r\nBefore the fix step 8 returned a broken link.\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build d",
+  "base_commit": "8bed89ce3b",
+  "fixed_commit": "da0ab1c271",
+  "additions": 112,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/Cause.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/CauseTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "CauseTest",
+  "test_command": "mvn test -pl test -am -Dtest=CauseTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9347",
+  "pr": 9347,
+  "title": "[JENKINS-73243] quote replacement string in symbol tooltips",
+  "merged_at": "2024-06-06",
+  "issue_text": "when the tooltip or html tooltip for a symbol contained the $ sign, then adding the tooltip failed with `Illegal group reference`.\r\n\r\na way to reproduce is with the Badge plugin. Add this to a pipeline\r\n```\r\naddInfoBadge(text: '$Info')\r\n```\r\nand the build history widget will fail.\r\n\r\nSee [JENKINS-73243](https://issues.jenkins.io/browse/JENKINS-73243).\r\n\r\n### Testing done\r\nAdded unit test that ensures tooltips are properly quoted.\r\nWithout the fix the test fails.\r\nAlso manual testing\r\n\r\n### Proposed changelog entries\r\n\r\n- Quote replacement string in symbol tooltips.\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [x] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [x] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [x] For new APIs and extension points, there is a link to at least one consumer.\r\n```\r\n\r\n### Desired reviewers\r\n\r\nN/A? \r\n\r\nBefor",
+  "base_commit": "8088382929",
+  "fixed_commit": "5978ebe594",
+  "additions": 21,
+  "deletions": 3,
+  "source_files": [
+    "core/src/main/java/org/jenkins/ui/symbol/Symbol.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/org/jenkins/ui/symbol/SymbolJenkinsTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "SymbolJenkinsTest",
+  "test_command": "mvn test -pl test -am -Dtest=SymbolJenkinsTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

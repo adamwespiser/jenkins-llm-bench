@@ -1,0 +1,16 @@
+{
+  "task_id": "jenkins-11304",
+  "condition": "level1_full",
+  "model": "claude-sonnet-4-6",
+  "timestamp": "20260424T040615",
+  "base_commit": "9fcb61556a",
+  "fixed_commit": "d518e5ba22",
+  "base_test_passed": false,
+  "post_agent_test_passed": null,
+  "agent": {},
+  "files_changed": 0,
+  "lines_changed": 0,
+  "outcome": "harness_error",
+  "error": "Command failed with exit code 1 (exit code: 1)\nError output: Check stderr output for details",
+  "base_test_duration_s": 14.086365699768066
+}

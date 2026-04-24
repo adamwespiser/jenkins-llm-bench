@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-9311",
+  "pr": 9311,
+  "title": "[JENKINS-10629] Migrate from Commons Compress to Ant",
+  "merged_at": "2024-05-27",
+  "issue_text": "We originally used Ant for tar/untar functionality, but we migrated to Commons Compress in #1670, which also added the Commons Compress library to the WAR. Fast forward to today, and recent releases of Commons Compress depend on Commons Lang 3. We don't want to keep increasing the API surface area of the WAR by pulling in these random libraries. And pulling in Commons Lang 3 would override the library plugin we ship today.\n\nA solution can be found by migrating from Commons Compress back to Ant. Our original reason for migrating away from it was that it did not support large files > 8 GiB in size. Today, it does, and I verified this with an automated test. We are unlikely to ever remove Ant from Jenkins core, as it is used in a lot of places in core, so why not use it for tar/untar functionality as well. And unlike Commons Compress, it has no dependency on Commons Lang 3.\n\nIn the meantime, we're still blocked from upgrading to the latest release of Commons Compress, because the latest release depends on Commons Lang 3 which we do not want to introduce. But this PR shows a path forward. With core's dependency on Commons Compress removed, plugins can then be adapted, and we can eventually remove Commons Compress from core. Plugins could be adapted by either migrating to core's copy of Ant (as in this PR) or a new Commons Compress library plugin could be created and plugins migrated to that instead. That Commons Compress library plugin could depend on Commons Lang 3 as a plugin-to-plugin dependency.\n\n### Testing done\n\nRan the new test and it passed after about 2 minutes. I am not enabling it by default as it requires a lot of time and disk space to run.\n\n### Proposed changelog entries\n\nN/A\n\n### Proposed upgrade guidelines\n\nN/A\n\n```[tasklist]\n### Submitter checklist\n- [x] The Jira issue, if it exists, is well-described.\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change)",
+  "base_commit": "dae17374aa",
+  "fixed_commit": "c10cafc2b5",
+  "additions": 77,
+  "deletions": 21,
+  "source_files": [
+    "core/src/main/java/hudson/FilePath.java",
+    "core/src/main/java/hudson/util/io/TarArchiver.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/tasks/ArtifactArchiverTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ArtifactArchiverTest",
+  "test_command": "mvn test -pl test -am -Dtest=ArtifactArchiverTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

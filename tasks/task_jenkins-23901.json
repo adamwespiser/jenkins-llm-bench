@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-23901",
+  "pr": 23901,
+  "title": "Add telemetry for Content Security Policy",
+  "merged_at": "2025-12-13",
+  "issue_text": "This adds basic JEP-214 telemetry for Content Security Policy (introduced in Jenkins 2.539).\r\n\r\nResolves https://github.com/jenkinsci/jenkins/issues/23900.\r\n\r\n### Testing done\r\n\r\nScript console:\r\n`ExtensionList.lookupSingleton(jenkins.telemetry.impl.ContentSecurityPolicy).createContent()`\r\n\r\nOutput:\r\n> `Result: {\"enforce\":false,\"decider\":\"jenkins.security.csp.impl.DevelopmentHeaderDecider\",\"header\":\"Content-Security-Policy\",\"contributors\":[\"io.jenkins.plugins.csp.ContentSecurityPolicyContributor\",\"jenkins.security.csp.AvatarContributor\",\"jenkins.security.csp.impl.BaseContributor\",\"jenkins.security.csp.impl.CompatibleContributor\",\"jenkins.security.csp.impl.UserAvatarContributor\"],\"configurations\":[\"io.jenkins.plugins.csp.CustomRuleAdvancedConfiguration$DescriptorImpl\",\"io.jenkins.plugins.csp.ReportingAdvancedConfiguration$DescriptorImpl\"],\"directivesSize\":{\"style-src\":{\"entries\":3,\"chars\":38},\"base-uri\":{\"entries\":0,\"chars\":0},\"script-src\":{\"entries\":2,\"chars\":22},\"form-action\":{\"entries\":1,\"chars\":6},\"frame-ancestors\":{\"entries\":1,\"chars\":6},\"img-src\":{\"entries\":2,\"chars\":12},\"default-src\":{\"entries\":1,\"chars\":6}},\"components\":{\"commons-lang3-api\":\"3.19.0-104.v12125f33a_255\",\"csp\":\"2.57.va_b_326b_54f1ee\",\"ionicons-api\":\"94.vcc3065403257\",\"jenkins-core\":\"2.541-SNAPSHOT\"}}`\r\n\r\nUI help (with wrong date to locally test):\r\n\r\n<img width=\"1740\" height=\"428\" alt=\"image\" src=\"https://github.com/user-attachments/assets/e696e469-312c-4b91-8a79-6f3966cad565\" />\r\n\r\nI also confirmed there are submissions to Uplink.\r\n\r\n### Proposed changelog entries\r\n\r\n- Add telemetry for Content Security Policy enforcement.\r\n\r\n### Proposed changelog category\r\n\r\n/label rfe\r\n\r\n<!--\r\nThe changelog entry needs to have a category which is selected based on the label.\r\nIf there's no changelog then the label should be `skip-changelog`.\r\n\r\nThe available categories are:\r\n* bug - Minor bug. Will be listed after features\r\n* developer - Changes which impact plugin developers\r\n* dependencies - Pull requests t",
+  "base_commit": "3b501e7668",
+  "fixed_commit": "88fdfa9223",
+  "additions": 193,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/jenkins/telemetry/impl/ContentSecurityPolicy.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/telemetry/impl/ContentSecurityPolicyTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "ContentSecurityPolicyTest",
+  "test_command": "mvn test -pl test -am -Dtest=ContentSecurityPolicyTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

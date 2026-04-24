@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-commit-554f037820",
+  "pr": null,
+  "title": "[SECURITY-3314]",
+  "merged_at": "2024-01-16",
+  "issue_text": "[SECURITY-3314]",
+  "base_commit": "de450967f3",
+  "fixed_commit": "554f037820",
+  "additions": 73,
+  "deletions": 2,
+  "source_files": [
+    "core/src/main/java/hudson/cli/CLICommand.java",
+    "core/src/main/java/hudson/cli/declarative/CLIRegisterer.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/Security3314Test.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "Security3314Test",
+  "test_command": "mvn test -pl test -am -Dtest=Security3314Test -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=new_file. Integration test. No public PR."
+}

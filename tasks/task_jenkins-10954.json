@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10954",
+  "pr": 10954,
+  "title": "Better error response from `doBuildWithParameters`",
+  "merged_at": "2025-08-18",
+  "issue_text": "I noticed a long stack trace in system logs\n\n```\nWARNING Error while serving https://\u2026/job/\u2026/buildWithParameters\njava.lang.IllegalStateException: This build is not parameterized!\n\tat jenkins.model.ParameterizedJobMixIn.doBuildWithParameters(ParameterizedJobMixIn.java:246)\n\tat jenkins.model.ParameterizedJobMixIn$ParameterizedJob.doBuildWithParameters(ParameterizedJobMixIn.java:446)\n\tat \u2026\n```\n\nrather than a sensible HTTP response.\n\n### Testing done\n\nTest without fix produces a 500 response with giant stack trace. With fix, a 400 with a polite message.\n\n### Proposed changelog entries\n\n- Friendlier HTTP response for an attempt to `buildWithParameters` a disabled or non-parameterized job.\n\n### Proposed changelog category\n\n/label bug\n\n### Proposed upgrade guidelines\n\nN/A\n\n### Maintainer checklist\n\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\n- [ ] Changelog entries in the pull request title and/or **Proposed changelog entries** are accurate, human-readable, and in the imperative mood.\n- [ ] Proper changelog labels are set so that the changelog can be generated automatically.\n- [ ] If the change needs additional upgrade steps from users, the `upgrade-guide-needed` label is set and there is a **Proposed upgrade guidelines** section in the pull request title (see [example](https://github.com/jenkinsci/jenkins/pull/4387)).\n- [ ] If it would make sense to backport the change to LTS, a Jira issue must exist, be a _Bug_ or _Improvement_, and be labeled as `lts-candidate` to be considered (see [query](https://issues.jenkins.io/issues/?filter=12146)).",
+  "base_commit": "1fc1b4a2c0",
+  "fixed_commit": "521ecfdbfc",
+  "additions": 19,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/jenkins/model/ParameterizedJobMixIn.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/ParameterizedJobMixInTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ParameterizedJobMixInTest",
+  "test_command": "mvn test -pl test -am -Dtest=ParameterizedJobMixInTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

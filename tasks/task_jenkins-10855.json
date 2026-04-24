@@ -1,0 +1,30 @@
+{
+  "id": "jenkins-10855",
+  "pr": 10855,
+  "title": "`AdministrativeMonitorsDecorator` cleanup; `ManageJenkinsAction.getBadge` optimization",
+  "merged_at": "2025-08-15",
+  "issue_text": "#2558 introduced `AdministrativeMonitorsDecorator` which #5063 elaborated with `AdministrativeMonitorsApi`. However #10245 completely redesigned how this information is shown in all cases except for the actual `/manage/` page, which continues to display the HTML blurbs of all active admin monitors. Now other pages (as viewed by an admin) merely need to show a badge if there are _any_ admin monitors active. It did include a count, but counting them forces the `isActivated` method of all applicable monitors to be run on every page load, when really what we mainly care about is whether or not a badge needs to be shown (and whether it should be marked a security issue or not). So we can now actually just check whether there is at least one security monitor active; if not, whether there is at least one non-security monitor active. While `isActivated` was documented to need to run \u201cfast\u201d, this was a burden, and we may as well try to avoid checking any more monitors than we really have to, if there is already at least one monitor active.\n\nThis also cleans up a bunch of dead code left behind by #10245.\n\n### Testing done\n\nNew test coverage for laziness (failed as expected prior to change). Also various interactive tests causing three categories of monitor to be activated or not:\n\n* security\n* non-security\n* reverse proxy & URI encoding, which should be ignored for purposes of the badge (they either display a chunk in `/manage/` or they do not)\n\n### Proposed changelog entries\n\n- Minor performance optimization for display of the badge for administrative monitors.\n\n### Proposed changelog category\n\n/label rfe\n\n### Proposed upgrade guidelines\n\nN/A\n\n### Submitter checklist\n\n- [ ] The Jira issue, if it exists, is well-described.\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/",
+  "base_commit": "3bf037ca07",
+  "fixed_commit": "00c6707c45",
+  "additions": 110,
+  "deletions": 288,
+  "source_files": [
+    "core/src/main/java/hudson/diagnosis/ReverseProxySetupMonitor.java",
+    "core/src/main/java/hudson/model/AdministrativeMonitor.java",
+    "core/src/main/java/hudson/model/ManageJenkinsAction.java",
+    "core/src/main/java/jenkins/diagnostics/URICheckEncodingMonitor.java",
+    "core/src/main/java/jenkins/management/Badge.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/management/AdministrativeMonitorsDecoratorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "AdministrativeMonitorsDecoratorTest",
+  "test_command": "mvn test -pl test -am -Dtest=AdministrativeMonitorsDecoratorTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "5 source file(s), signal=modified_with_new_methods. Integration test."
+}

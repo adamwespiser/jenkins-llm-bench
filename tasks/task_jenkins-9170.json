@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9170",
+  "pr": 9170,
+  "title": "[JENKINS-73011] Round-trip `JNLPLauncher.tunnel` to `null` not `\"\"`",
+  "merged_at": "2024-04-15",
+  "issue_text": "See [JENKINS-73011](https://issues.jenkins.io/browse/JENKINS-73011). Amends #8762 + #8793.\n\n### Testing done\n\nAutomated test; also confirmed bug interactively in 2.426.3 \u2192 2.440.2.\n\n### Proposed changelog entries\n\n- After reconfiguring a static inbound agent in the GUI using fields such as WebSocket deprecated in 2.440.x, the suggested launch instructions would incorrectly include `-tunnel` (with no argument) even if that field had been left blank.\n\nBefore the changes are marked as `ready-for-merge`:\n\n```[tasklist]\n### Maintainer checklist\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\n- [ ] Changelog entries in the pull request title and/or **Proposed changelog entries** are accurate, human-readable, and in the imperative mood.\n- [ ] Proper changelog labels are set so that the changelog can be generated automatically.\n- [ ] If the change needs additional upgrade steps from users, the `upgrade-guide-needed` label is set and there is a **Proposed upgrade guidelines** section in the pull request title (see [example](https://github.com/jenkinsci/jenkins/pull/4387)).\n- [ ] If it would make sense to backport the change to LTS, a Jira issue must exist, be a _Bug_ or _Improvement_, and be labeled as `lts-candidate` to be considered (see [query](https://issues.jenkins.io/issues/?filter=12146)).\n```",
+  "base_commit": "323ad6a4a1",
+  "fixed_commit": "13dc52c476",
+  "additions": 27,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/slaves/JNLPLauncher.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/slaves/JNLPLauncherTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "JNLPLauncherTest",
+  "test_command": "mvn test -pl test -am -Dtest=JNLPLauncherTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

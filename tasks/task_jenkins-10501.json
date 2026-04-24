@@ -1,0 +1,28 @@
+{
+  "id": "jenkins-10501",
+  "pr": 10501,
+  "title": "[JENKINS-68155] Fix state of previous labels when updating a node label",
+  "merged_at": "2025-04-15",
+  "issue_text": "Prior to #5882, `trimLabels` was global, so any node operation would cause all labels to be rebuilt.\r\n\r\nAfter #5882, the labels to rebuild were taken from the current state of nodes. When updating a node label however, both the old label and the new label need to be rebuilt.\r\n\r\nWhen a node labels are updated, the previous values are now saved aside in order to compute the proper labels to trim.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-68155](https://issues.jenkins.io/browse/JENKINS-68155).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\r\n-->\r\n\r\n### Proposed changelog entries\r\n\r\n- Fix state of labels remo",
+  "base_commit": "65c5f54644",
+  "fixed_commit": "983338f961",
+  "additions": 73,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/model/Node.java",
+    "core/src/main/java/hudson/model/Slave.java",
+    "core/src/main/java/jenkins/model/Jenkins.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/labels/LabelAtomTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "LabelAtomTest",
+  "test_command": "mvn test -pl test -am -Dtest=LabelAtomTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-9405",
+  "pr": 9405,
+  "title": "JENKINS-68822 added support for removing all builds with LogRotator",
+  "merged_at": "2024-08-21",
+  "issue_text": "See [JENKINS-68822](https://issues.jenkins.io/browse/JENKINS-68822).\r\n\r\n### Testing done\r\nVerified configuration in UI\r\nChecked that old configuration is loaded from disk\r\nRun the unit tests\r\n\r\n### Proposed changelog entries\r\n\r\n- Allow all builds to be removed by the build discarder.\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [ ] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [ ] For new APIs and extension points, there is a link to at least one consumer.\r\n```\r\nBefore the changes are marked as `ready-for-merge`:\r\n\r\n```[tasklist]\r\n### Maintainer checklist\r\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\r\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\r\n- [ ] Changelo",
+  "base_commit": "1272ab7f85",
+  "fixed_commit": "b064be0de8",
+  "additions": 60,
+  "deletions": 7,
+  "source_files": [
+    "core/src/main/java/hudson/tasks/ArtifactArchiver.java",
+    "core/src/main/java/hudson/tasks/LogRotator.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/tasks/LogRotatorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "LogRotatorTest",
+  "test_command": "mvn test -pl test -am -Dtest=LogRotatorTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

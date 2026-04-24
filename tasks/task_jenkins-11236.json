@@ -1,0 +1,30 @@
+{
+  "id": "jenkins-11236",
+  "pr": 11236,
+  "title": "Fix the ordering and visibility of experimental Run UI tabs",
+  "merged_at": "2025-11-11",
+  "issue_text": "Previously actions added to a Run (e.g. a _Tests_ action) would appear first, ignoring the order specified by factories. This PR resolves that. I've also hidden tabs that have null icons, as is consistent with tasks in Jenkins.\r\n\r\n\u27a1\ufe0f I've changed the ordering of `getActions(type)` in `Actionable.java` - this could have unintended consequences, so would be to confirm with fellow devs to ensure thats the right move.\r\n\r\n### Testing done\r\n\r\n* Need to confirm tests pass, but otherwise looks fine\r\n\r\n### Proposed changelog entries\r\n\r\n- Fix the ordering of the experimental Run UI tabs.\r\n\r\n### Proposed changelog category\r\n\r\n/label web-ui, bug\r\n\r\n<!--\r\nThe changelog entry needs to have a category which is selected based on the label.\r\nIf there's no changelog then the label should be `skip-changelog`.\r\n\r\nThe available categories are:\r\n* bug - Minor bug. Will be listed after features\r\n* developer - Changes which impact plugin developers\r\n* dependencies - Pull requests that update a dependency\r\n* internal - Internal only change, not user facing\r\n* into-lts - Changes that are backported to the LTS baseline\r\n* localization - Updates localization files\r\n* major-bug - Major bug. Will be highlighted on the top of the changelog\r\n* major-rfe - Major enhancement. Will be highlighted on the top\r\n* rfe - Minor enhancement\r\n* regression-fix - Fixes a regression in one of the previous Jenkins releases\r\n* removed - Removes a feature or a public API\r\n* skip-changelog - Should not be shown in the changelog\r\n\r\nNon-changelog categories:\r\n* web-ui - Changes in the web UI\r\n\r\nNon-changelog categories require a changelog category but should be used if applicable,\r\ncomma separate to provide multiple categories in the label command.\r\n-->\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n<!-- Comment:\r\nLeave the proposed upgrade guidelines in the pull request with the \"N/A\" value if no upgrade guidelines are needed.\r\nThe changelog generator relies on the presence of the upgrade guidelines section as part of",
+  "base_commit": "0166c65acf",
+  "fixed_commit": "0ea42364a2",
+  "additions": 138,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/hudson/model/Actionable.java",
+    "core/src/main/java/hudson/model/Job.java",
+    "core/src/main/java/hudson/model/Run.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/JobTest.java",
+    "test/src/test/java/hudson/model/RunTest.java",
+    "test/src/test/java/jenkins/model/TransientActionFactoryTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "JobTest",
+  "test_command": "mvn test -pl test -am -Dtest=JobTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=modified_with_new_methods. Integration test."
+}

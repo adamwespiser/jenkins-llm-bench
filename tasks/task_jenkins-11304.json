@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-11304",
+  "pr": 11304,
+  "title": "Update dependency org.springframework.security:spring-security-bom to v7",
+  "merged_at": "2026-03-18",
+  "issue_text": "This PR contains the following updates:\n\n| Package | Change | [Age](https://docs.renovatebot.com/merge-confidence/) | [Confidence](https://docs.renovatebot.com/merge-confidence/) |\n|---|---|---|---|\n| [org.springframework.security:spring-security-bom](https://spring.io/projects/spring-security) ([source](https://redirect.github.com/spring-projects/spring-security)) | `6.5.8` \u2192 `7.0.3` | ![age](https://developer.mend.io/api/mc/badges/age/maven/org.springframework.security:spring-security-bom/7.0.3?slim=true) | ![confidence](https://developer.mend.io/api/mc/badges/confidence/maven/org.springframework.security:spring-security-bom/6.5.8/7.0.3?slim=true) |\n\n---\n\n> [!WARNING]\n> Some dependencies could not be looked up. Check the [Dependency Dashboard](../issues/11308) for more information.\n\n---\n\n### Release Notes\n\n<details>\n<summary>spring-projects/spring-security (org.springframework.security:spring-security-bom)</summary>\n\n### [`v7.0.3`](https://redirect.github.com/spring-projects/spring-security/releases/tag/7.0.3)\n\n[Compare Source](https://redirect.github.com/spring-projects/spring-security/compare/7.0.2...7.0.3)\n\n#### :star: New Features\n\n- Fix Javadoc warnings in spring-security-web [#&#8203;18473](https://redirect.github.com/spring-projects/spring-security/pull/18473)\n- Fix/gradle 9 deprecations [#&#8203;18485](https://redirect.github.com/spring-projects/spring-security/issues/18485)\n- Fix/gradle 9 deprecations [#&#8203;18477](https://redirect.github.com/spring-projects/spring-security/pull/18477)\n- Replace method call with 'Builder.configureMessageConverters()' [#&#8203;18378](https://redirect.github.com/spring-projects/spring-security/pull/18378)\n- Replacing use of deprecated 'check' in authorization documentation [#&#8203;18390](https://redirect.github.com/spring-projects/spring-security/pull/18390)\n- Use DefaultParameterNameDiscoverer#getSharedInstance [#&#8203;18481](https://redirect.github.com/spring-projects/spring-security/pull/18481)\n\n#### :beetle: Bug Fix",
+  "base_commit": "9fcb61556a",
+  "fixed_commit": "d518e5ba22",
+  "additions": 24,
+  "deletions": 10,
+  "source_files": [
+    "core/src/main/java/hudson/security/HudsonPrivateSecurityRealm.java",
+    "core/src/main/java/hudson/security/PasswordHashEncoder.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/security/HudsonPrivateSecurityRealmTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "HudsonPrivateSecurityRealmTest",
+  "test_command": "mvn test -pl core -am -Dtest=HudsonPrivateSecurityRealmTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Unit test."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-8814",
+  "pr": 8814,
+  "title": "[JENKINS-72469] Avoid repeated tool downloads from misconfigured HTTP servers",
+  "merged_at": "2024-01-02",
+  "issue_text": "## [JENKINS-72469] Avoid repeated tool downloads from misconfigured HTTP servers\n\nThe Azul Systems content delivery network stopped providing the last-modified header in their URL responses.  They only provide the ETag header.\n\nAdd ETag support (based on the [ETag specification](https://httpwg.org/specs/rfc9110.html#field.etag)) to the Jenkins FilePath URL download method so that if ETag is provided, we use the ETag value.  If last-modified is provided and matches, we continue to honor it as well.\n\n[JENKINS-72469](https://issues.jenkins.io/browse/JENKINS-72469) has more details.\n\nThe [community post](https://community.jenkins.io/t/job-stuck-on-unpacking-global-jdk-tool/11272) also includes more details.\n\n### Testing done\n\n* Automated test added to FilePathTest for code changes on the controller.  The automated test confirms that even without a last-modified value, the later downloads are skipped if a matching ETag is received.  The automated test also confirms that download is skipped if OK is received with a matching ETag.  No automated test was added to confirm download on the agent because that path is not tested by any of the other test automation of this class.\n* Interactive test with the Azul Systems JDK installer on the controller.  I created a tool installer for the Azul JDK.  I verified that before this change it was downloaded each time the job was run.  I verified that after the change it was downloaded only once.  \n* Interactive test with the Azul Systems JDK installer on an agent.  I created a tool installer for the Azul JDK.  I verified that before this change it was downloaded each time the job was run.  I verified that after the change it was downloaded only once.\n* Interactive test on the controller with a file download from an NGINX web server confirmed that the tool is downloaded once and then later runs of the job did not download the file again.\n\n### Proposed changelog entries\n\n- Avoid repeated tool downloads from misconfigured HTTP servers.\n\n##",
+  "base_commit": "3597db8e13",
+  "fixed_commit": "c8156d41f2",
+  "additions": 111,
+  "deletions": 2,
+  "source_files": [
+    "core/src/main/java/hudson/FilePath.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/FilePathTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "FilePathTest",
+  "test_command": "mvn test -pl core -am -Dtest=FilePathTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

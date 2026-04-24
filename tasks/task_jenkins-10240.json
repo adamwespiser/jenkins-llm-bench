@@ -1,0 +1,29 @@
+{
+  "id": "jenkins-10240",
+  "pr": 10240,
+  "title": "[JENKINS-75232] Prevent dynamic plugin installation from registering the same extension twice in some cases",
+  "merged_at": "2025-03-05",
+  "issue_text": "<!-- Comment:\nA great PR typically begins with the line below.\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\n-->\n\nSee [JENKINS-75232](https://issues.jenkins.io/browse/JENKINS-75232). The relevant `ExtensionList` code has not changed since it was introduced in https://github.com/jenkinsci/jenkins/pull/1673, but in the real-world case I saw the listener that is causing the issues comes from https://github.com/jenkinsci/jenkins/pull/3496.\n\nThis PR requires https://github.com/jenkinsci/jenkins-test-harness/pull/920 for the new test.\n\n<!-- Comment:\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\n\n * We do not require Jira issues for minor improvements.\n * Bug fixes should have a Jira issue to facilitate the backporting process.\n * Major new features should have a Jira issue.\n-->\n\n### Testing done\n\n<!-- Comment:\nProvide a clear description of how this change was tested.\nAt minimum this should include proof that a computer has executed the changed lines.\nIdeally this should include an automated test or an explanation as to why this change has no tests.\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\n-->\n\nA new automated test has been created to demonstrate the bug and test the fix. @jgreffe and I also tested the fix against the real-world ",
+  "base_commit": "4721709e93",
+  "fixed_commit": "e49d4e7d6e",
+  "additions": 232,
+  "deletions": 65,
+  "source_files": [
+    "test/src/test/java/jenkins/plugins/dynamic_extension_loading/CustomExtensionLoadedViaConstructor.java",
+    "test/src/test/java/jenkins/plugins/dynamic_extension_loading/CustomExtensionLoadedViaListener.java",
+    "test/src/test/java/jenkins/plugins/dynamic_extension_loading/CustomPeriodicWork.java",
+    "test/src/test/java/jenkins/plugins/dynamic_extension_loading/package-info.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/ExtensionListRjrTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "ExtensionListRjrTest",
+  "test_command": "mvn test -pl test -am -Dtest=ExtensionListRjrTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "4 source file(s), signal=new_file. Integration test."
+}

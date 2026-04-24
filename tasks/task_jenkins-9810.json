@@ -1,0 +1,31 @@
+{
+  "id": "jenkins-9810",
+  "pr": 9810,
+  "title": "[JENKINS-73835] Do not allow builds to be deleted while they are still running and ensure build discarders run after builds are fully complete",
+  "merged_at": "2024-10-12",
+  "issue_text": "See [JENKINS-73835](https://issues.jenkins.io/browse/JENKINS-73835) and https://github.com/jenkinsci/workflow-job-plugin/pull/470. I noticed this while investigating #9790, but it is a distinct issue.\r\n\r\nThis PR makes `Run.delete` throw an exception if it is called on a build which has not yet completed. It also adjusts some logic related to `LogRotator`, which is the main programmatic caller of `Run.delete` to avoid some race conditions and related issues. \r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\nSee new automated PRs.\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\r\n-->\r\n\r\n### Proposed changelog entries\r\n\r\n- Do not allow builds to be deleted while they are still building\r\n- Ensure build discarders only process builds which have fully completed\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\r\nFor examples, see: https://www.jenkin",
+  "base_commit": "925de03663",
+  "fixed_commit": "d34b17ee4b",
+  "additions": 64,
+  "deletions": 26,
+  "source_files": [
+    "core/src/main/java/hudson/model/Run.java",
+    "core/src/main/java/hudson/tasks/LogRotator.java",
+    "core/src/main/java/jenkins/model/BackgroundGlobalBuildDiscarder.java",
+    "core/src/main/java/jenkins/model/GlobalBuildDiscarderListener.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/cli/DeleteBuildsCommandTest.java",
+    "test/src/test/java/hudson/model/RunTest.java",
+    "test/src/test/java/hudson/tasks/LogRotatorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "DeleteBuildsCommandTest",
+  "test_command": "mvn test -pl test -am -Dtest=DeleteBuildsCommandTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test."
+}

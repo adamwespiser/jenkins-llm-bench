@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9887",
+  "pr": 9887,
+  "title": "Reduce default size of diagnostic buffer for `FlightRecorderInputStream` from 1MiB to 1KiB",
+  "merged_at": "2024-10-21",
+  "issue_text": "Refiling https://github.com/jenkinsci/remoting/pull/770 against the duplicated class here.\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\nI added a new test to cover the `FlightRecorderInputStream` diagnostics for the CLI.\r\n\r\n### Proposed changelog entries\r\n\r\nN/A\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\r\nFor examples, see: https://www.jenkins.io/changelog/\r\n\r\nDo not include the Jira issue in the changelog entry.\r\nInclude the Jira issue in the description of the pull request so that the changelog generator can find it and include it in the generated changelog.\r\n\r\nYou may add multiple changelog entries if applicable by adding a new entry to the list, e.g.\r\n- First changelog entry\r\n- Second changelog entry\r\n-->\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n<!-- Comment:\r\nLeave the proposed upgrade guidelines in the pull request with the \"N/A\" value if no upgrade guidelines are needed.\r\nThe changelog generator relies on the presence of the upgrade guidelines section as part of its data extraction process.\r\n-->\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automat",
+  "base_commit": "9af59503d5",
+  "fixed_commit": "eb07f9e734",
+  "additions": 62,
+  "deletions": 1,
+  "source_files": [
+    "cli/src/main/java/hudson/cli/FlightRecorderInputStream.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/cli/PlainCLIProtocolTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "PlainCLIProtocolTest",
+  "test_command": "mvn test -pl test -am -Dtest=PlainCLIProtocolTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

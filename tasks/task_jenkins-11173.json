@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-11173",
+  "pr": 11173,
+  "title": "A `CauseOfBlockage` can be fatal",
+  "merged_at": "2025-10-10",
+  "issue_text": "In specific cases, a `CauseOfBlockage` can be fatal and cause the corresponding queue item to be cancelled immediately.\r\n\r\nThis is motivated by a use case we have in the context of CloudBees CI HA, where an implementation of `QueueTaskDispatcher` can block a queue item indefinitely, only to cancel it later (because the current core implementation doesn't allow to cancel it immediately). Instead, it is cleaner to signal immediately that the item should be removed from the queue.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-XXXXX](https://issues.jenkins.io/browse/JENKINS-XXXXX).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior r",
+  "base_commit": "fa233a1ba0",
+  "fixed_commit": "e45c6140b8",
+  "additions": 87,
+  "deletions": 25,
+  "source_files": [
+    "core/src/main/java/hudson/model/Queue.java",
+    "core/src/main/java/hudson/model/queue/CauseOfBlockage.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/QueueTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "QueueTest",
+  "test_command": "mvn test -pl test -am -Dtest=QueueTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

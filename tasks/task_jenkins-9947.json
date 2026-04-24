@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9947",
+  "pr": 9947,
+  "title": "[JENKINS-74795] Job created via REST API attaches to default view",
+  "merged_at": "2024-11-08",
+  "issue_text": "### Problem\r\n\r\nSee [JENKINS-74795](https://issues.jenkins.io/browse/JENKINS-74795). Creating jobs via the `createItem` REST API erroneously attaches those items to the default view after #9672.\r\n\r\n### Evaluation\r\n\r\nIn the working scenario prior to #9672, the `Jenkins#doCreateItem` method is invoked by Stapler via its routable interface method `ModifiableItemGroup#doCreateItem`. In the failing scenario after #9672, the (incorrect) `ListView#doCreateItem` method is invoked by Stapler via its routable superclass method `View#doCreateItem`. This (mostly) works by accident, since `View#doCreateItem` happens to delegate to `Jenkins#doCreateItem`, but the incorrect behavior is still apparent when the item is incorrectly added to the default view. `View#doCreateItem` should never be invoked in this scenario, and the only reason it is was a regression in routing in #9672.\r\n\r\n### Solution\r\n\r\nMake the `Jenkins#doCreateItem(StaplerRequest2, StaplerResponse2)` default method routable, as the equivalent interface method was prior to #9672. For consistency with `View#doCreateItem(StaplerRequest2, StaplerResponse2)`, add a `@RequirePOST` annotation as well. The deprecated compatibility methods remain non-routable as before.\r\n\r\n### Testing done\r\n\r\n- Functional testing: new integration test passes before #9672, fails after #9672, and passes with this PR.\r\n- Regression testing: CI build of Jenkins core, ATH, and BOM/PCT\r\n\r\n### Proposed changelog entries\r\n\r\n- Do not add jobs created via the REST API to the default view.\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n<!-- Comment:\r\nLeave the proposed upgrade guidelines in the pull request with the \"N/A\" value if no upgrade guidelines are needed.\r\nThe changelog generator relies on the presence of the upgrade guidelines section as part of its data extraction process.\r\n-->\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for t",
+  "base_commit": "ac63b7f156",
+  "fixed_commit": "8298257227",
+  "additions": 55,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/model/ModifiableItemGroup.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/jobs/CreateItemTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "CreateItemTest",
+  "test_command": "mvn test -pl test -am -Dtest=CreateItemTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

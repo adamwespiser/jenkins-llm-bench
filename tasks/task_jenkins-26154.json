@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-26154",
+  "pr": 26154,
+  "title": "Fix temporary offline state of computer is lost on config submit",
+  "merged_at": "2026-01-23",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace <issue-number> with the issue number.\r\n-->\r\n\r\nFixes #26146\r\n\r\nI suspect that #9855 is the cause for the issue.\r\nI could reproduce the issue in version 2.492.3 so it exists since a while.\r\n\r\nRoot cause is that the config is based on the a Computer Object while the persistence is based on a Node object. Upon saving the configuration of a computer a new Node object is created based from the form fields but as the cause is not part of the form it is not persisted. Before #9855 the temporaryOfflineCcause was kept in the computer object directly, so a change in config didn't lead to a loss as the Computer object continues to live (might have caused a loss at restart though).\r\nThe fix is to set the cause after the new Node object is created before re-establishing the connection between computer and new Node object.\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in the issue tracker, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require an issue for minor improvements.\r\n * Major new features should have an issue created.\r\n-->\r\n\r\n### Testing done\r\n- Create a computer\r\n- set it to temporary offline\r\n- configure the computer (no change necessary) and save\r\n- computer is still set to temporary offline\r\n- restarted Jenkins and verified computer is still offline\r\n\r\nAdded a unit test that fails without the fix and succeeds with the fix\r\n\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in wh",
+  "base_commit": "471a287b57",
+  "fixed_commit": "620b9021d3",
+  "additions": 14,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/Computer.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/ComputerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ComputerTest",
+  "test_command": "mvn test -pl test -am -Dtest=ComputerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

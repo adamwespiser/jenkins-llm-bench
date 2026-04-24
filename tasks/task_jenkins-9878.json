@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9878",
+  "pr": 9878,
+  "title": "Print Jenkins version on boot",
+  "merged_at": "2024-10-20",
+  "issue_text": "I just had a case where I wished I had this information at hand to better understand a failed startup (in a e2e test context). Can be also useful through support bundles to investigate upgrade cases.\n\n\n### Testing done\n\nAutomated test confirms log output is generated.\n\n### Proposed changelog entries\n\n- N/A\n\n### Proposed upgrade guidelines\n\nN/A\n\n\n```[tasklist]\n### Submitter checklist\n- [X] The Jira issue, if it exists, is well-described.\n- [X] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\n- [X] There is automated testing or an explanation as to why this change has no tests.\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\n- [x] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\n- [x] For dependency updates, there are links to external changelogs and, if possible, full differentials.\n- [x] For new APIs and extension points, there is a link to at least one consumer.\n```\n\n### Desired reviewers\n\n@mention\n\n<!-- Comment:\nIf you need an accelerated review process by the community (e.g., for critical bugs), mention @jenkinsci/core-pr-reviewers.\n-->\n\nBefore the changes are marked as `ready-for-merge`:\n\n```[tasklist]\n### Maintainer checklist\n- [ ] There are at least two (2) approvals for the p",
+  "base_commit": "13d2b78f0e",
+  "fixed_commit": "e8360278e2",
+  "additions": 25,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/jenkins/model/Jenkins.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/JenkinsVersionTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "JenkinsVersionTest",
+  "test_command": "mvn test -pl test -am -Dtest=JenkinsVersionTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

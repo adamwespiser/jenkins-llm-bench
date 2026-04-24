@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9083",
+  "pr": 9083,
+  "title": "[JENKINS-65829] Fix WorkspaceCleanupThread to consider suffixed workspaces even if original is inexistent",
+  "merged_at": "2024-04-14",
+  "issue_text": "See [JENKINS-65829](https://issues.jenkins.io/browse/JENKINS-65829). The `WorkspaceCleanupThread` was not considering workspaces with suffixes if the original workspace did not exist. Typically `@libs` workspaces on a controller.\r\n\r\nReworked the `WorkspaceCleanupThread` to reduce the number of remoting calls by creating a `MasterToSlaveFileCallable` that do filtering + deletion. There used to be multiple calls to check if directory exists, the last modified date, do a delete recursive, do a delete of the suffixes. \r\n\r\n* https://github.com/jenkinsci/jenkins/blob/jenkins-2.451/core/src/main/java/hudson/model/WorkspaceCleanupThread.java#L107 (this was actually a problem because the we can have suffixed workspaces that exist but the workspace actually does not)\r\n* https://github.com/jenkinsci/jenkins/blob/jenkins-2.451/core/src/main/java/hudson/model/WorkspaceCleanupThread.java#L114 \r\n* https://github.com/jenkinsci/jenkins/blob/jenkins-2.451/core/src/main/java/hudson/model/WorkspaceCleanupThread.java#L93\r\n* https://github.com/jenkinsci/jenkins/blob/jenkins-2.451/core/src/main/java/hudson/model/WorkspaceCleanupThread.java#L94\r\n\r\nNow reduced to only one remoting call.\r\n\r\nhttps://github.com/Dohbedoh/jenkins/blob/JENKINS-65829/core/src/main/java/hudson/model/WorkspaceCleanupThread.java#L102\r\n\r\n**Note: the retention is check on each directory. Before, we used to check the last modified date of the WORKSPACE directory and if older than 30 day, we would delete it and all suffixed workspace. Now we check the last modified date of each directory. Which makes sense to me. WDYT ?**\r\n\r\n### Testing done\r\n\r\n#### Test 1\r\n\r\n* Start Jenkins\r\n* Set up a remote agent\r\n* Create a pipeline that clones a library:\r\n\r\n```\r\n@Library(\"testLibs\") _\r\nnode ('test') {\r\n    writeFile(file: \"test.txt\", text: \"test\")\r\n}\r\n```\r\n\r\n* Build the job\r\n* Run the following in the script console to execute the thread run:\r\n\r\n```\r\nhudson.model.WorkspaceCleanupThread.retainForDays=0\r\nhudson.model.AsyncPeriodicWork",
+  "base_commit": "e9adbc9833",
+  "fixed_commit": "323ad6a4a1",
+  "additions": 94,
+  "deletions": 19,
+  "source_files": [
+    "core/src/main/java/hudson/model/WorkspaceCleanupThread.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/WorkspaceCleanupThreadTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "WorkspaceCleanupThreadTest",
+  "test_command": "mvn test -pl test -am -Dtest=WorkspaceCleanupThreadTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

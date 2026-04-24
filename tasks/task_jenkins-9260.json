@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9260",
+  "pr": 9260,
+  "title": "Clean up file parameter tests",
+  "merged_at": "2024-05-12",
+  "issue_text": "While testing the upgrade of Commons FileUpload from v1 to v2, I noticed that `QueueTest#fileItemPersistence` started failing because the v2 `DiskFileItem` wasn't serializable with XStream, as it trips up JEP-200 class filtering. Looking at what this test does, it seems like a fairly artificial / contrived test. Back when it was added in commit 06d93cbc9babe98d8f7d4a93ead2d2688c05c6c5, `FileParameterValue` was indeed serializing a `FileItem` to disk, but that behavior was changed in commit 4dde24e62037439b7b73addd7cefae83a254eb3c, which (as far as I can tell) also broke the ability to queue a build with a file parameter and have that build successfully execute after a restart (since, even though the queue was saved correctly, the `FileParameterValue` wouldn't have its `FileItem` after the restart, resulting in a `NullPointerException` in the `BuildWrapper` returned by `FileParameterValue#createBuildWrapper`)\u2014not that anyone seems to have missed this feature in the intervening decade. I tried various things in the UI but could not get a `DiskFileItem` to be serialized no matter what I tried, so I am concluding that this isn't possible anymore after commit 4dde24e62037439b7b73addd7cefae83a254eb3c and that `QueueTest#fileItemPersistence` is a pointless test that can be deleted. I did at least manage to write a test for the scenario described in JENKINS-13536, something that was apparently attempted in commit 4dde24e62037439b7b73addd7cefae83a254eb3c, though not successfully.\r\n\r\n### Testing done\r\n\r\n`mvn clean verify -Dtest=hudson.model.FileParameterValuePersistenceTest`\r\n\r\n### Proposed changelog entries\r\n\r\nN/A\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkin",
+  "base_commit": "144e6b1a98",
+  "fixed_commit": "ad571f8dec",
+  "additions": 81,
+  "deletions": 75,
+  "source_files": [
+    "core/src/main/java/hudson/model/FileParameterValue.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/FileParameterValuePersistenceTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "FileParameterValuePersistenceTest",
+  "test_command": "mvn test -pl test -am -Dtest=FileParameterValuePersistenceTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Integration test."
+}

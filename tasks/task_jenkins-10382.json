@@ -1,0 +1,28 @@
+{
+  "id": "jenkins-10382",
+  "pr": 10382,
+  "title": "[JENKINS-75378] Adding a CLI command listener",
+  "merged_at": "2025-03-22",
+  "issue_text": "See [JENKINS-75378](https://issues.jenkins.io/browse/JENKINS-75378).\r\n\r\nThe default implementation mimics the current logs in CLICommand.\r\n\r\n### Testing done\r\n\r\nExecuted commands using cli.jar using different transports\r\n\r\n### Proposed changelog entries\r\n\r\n- Add a new ExtensionPoint to receive events from CLI executions.\r\n- Move logs from CLICommand to a new default listener.\r\n- Command implementations using CLIMethod now log under the same conditions as CLICommand.\r\n\r\n### Proposed changelog category\r\n\r\n/label rfe\r\n\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n<!-- Comment:\r\nLeave the proposed upgrade guidelines in the pull request with the \"N/A\" value if no upgrade guidelines are needed.\r\nThe changelog generator relies on the presence of the upgrade guidelines section as part of its data extraction process.\r\n-->\r\n\r\n### Submitter checklist\r\n\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [x] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [x] For dependency updates, there are ",
+  "base_commit": "a1f9d3e7e2",
+  "fixed_commit": "2fb523ffe3",
+  "additions": 485,
+  "deletions": 95,
+  "source_files": [
+    "core/src/main/java/hudson/cli/listeners/CliListener.java",
+    "core/src/main/java/hudson/cli/listeners/DefaultCliListener.java",
+    "core/src/main/java/hudson/cli/CLICommand.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/cli/CliListenerTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "CliListenerTest",
+  "test_command": "mvn test -pl test -am -Dtest=CliListenerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=new_file. Integration test."
+}

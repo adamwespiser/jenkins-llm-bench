@@ -1,0 +1,28 @@
+{
+  "id": "jenkins-9446",
+  "pr": 9446,
+  "title": "[JENKINS-66105] Allow follow redirects to work after 303 from `buildWithParameters`",
+  "merged_at": "2024-07-20",
+  "issue_text": "https://github.com/jenkinsci/jenkins/pull/5615#issuecomment-2215364164 is a source of confusion. Users not familiar with the details of how Jenkins queue item requests are supposed to be processed may assume that they can instruct an API client to follow redirects and that they will always get a 2xx status code when a build trigger request was somehow successful. After #5615, a fresh queue item would return a 201 with a `Location` header that a client would normally ignore; but an existing queue item would return a 303 with a `Location` that points to a URL not usable on its own, and a typical client will follow the redirect as is, yielding a 404 which left the mistaken impression that the queue item did not exist. Now we return a 200 to clarify that the queue item is there, though to be _useful_ you need to actually append to the returned URL to define a particular query you want (such as looking up the build in this example, which in turn would require a polling loop).\r\n\r\n### Testing done\r\n\r\nAdded a test case that was missing from #5615. Without fix, fails in the reported confusing way (even though nothing is actually wrong):\r\n\r\n```\r\norg.htmlunit.FailingHttpStatusCodeException: 404 Not Found for http://localhost:43021/jenkins/queue/item/1/\r\n\tat org.htmlunit.WebClient.throwFailingHttpStatusCodeExceptionIfNecessary(WebClient.java:719)\r\n\tat org.htmlunit.WebClient.getPage(WebClient.java:473)\r\n\tat org.htmlunit.WebClient.getPage(WebClient.java:370)\r\n\tat org.htmlunit.WebClient.getPage(WebClient.java:523)\r\n\tat hudson.model.ParametersDefinitionPropertyTest.codeFromBuildWithParameters(ParametersDefinitionPropertyTest.java:118)\r\n\tat hudson.model.ParametersDefinitionPropertyTest.statusCodes(ParametersDefinitionPropertyTest.java:114)\r\n```\r\n\r\n### Proposed changelog entries\r\n\r\n- `/queue/item/nnnnn/` URLs (with no `api/\u2026` suffix) now return a 200 `text/plain` response to emphasize that the queue item does exist but that you would need to construct a specific query to find out mor",
+  "base_commit": "baa0b2c25c",
+  "fixed_commit": "62e4ac4778",
+  "additions": 37,
+  "deletions": 5,
+  "source_files": [
+    "core/src/main/java/hudson/model/BuildAuthorizationToken.java",
+    "core/src/main/java/hudson/model/Queue.java",
+    "core/src/main/java/jenkins/model/ParameterizedJobMixIn.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/ParametersDefinitionPropertyTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ParametersDefinitionPropertyTest",
+  "test_command": "mvn test -pl test -am -Dtest=ParametersDefinitionPropertyTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=modified_with_new_methods. Integration test."
+}

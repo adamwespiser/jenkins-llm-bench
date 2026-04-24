@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-11032",
+  "pr": 11032,
+  "title": "Add addNodeIfAbsent method to Nodes.",
+  "merged_at": "2025-09-17",
+  "issue_text": "This PR adds a `addNodeIfAbsent` method to the Nodes object. This method is analogous to the existing `addNode` method, except instead of replacing any existing node with the same name, this method is a no-op if a node of the same name already exists.\r\n\r\nWe would like to add this method for use in an internal plugin which handles dynamic node registration. Right now there is a race condition when two nodes attempt to register at the same time with the same name. Although the calling code in our plugin does a check-and-set to validate that a node with the given name doesn't already exist, this is not atomic and can lead to both nodes believing they have successfully claimed the agent name. We are working around this today with an additional synchronization block in our calling block, but this change allows us to leverage existing concurrency primitives inside Nodes without introducing additional blocking locks.\r\n\r\n### Testing done\r\n\r\nAdditional test cases have been added to NodesTest, analogous to existing test cases for Nodes.\r\n\r\n### Proposed changelog entries\r\n\r\nSince this is a minor update only visible to plugin developers, it doesn't feel worth including this in the changelog, though I'm happy to add a suggestion here if maintainers feel otherwise.\r\n\r\n### Proposed changelog category\r\n\r\n/label skip-changelog\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [*] The Jira issue, if it exists, is well-described.\r\n- [*] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [*] There is automated testing or an explanation as to why this change has no tests.\r\n-",
+  "base_commit": "88dd0bf930",
+  "fixed_commit": "066f4c2fc2",
+  "additions": 88,
+  "deletions": 27,
+  "source_files": [
+    "core/src/main/java/jenkins/model/Nodes.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/NodesTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "NodesTest",
+  "test_command": "mvn test -pl test -am -Dtest=NodesTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

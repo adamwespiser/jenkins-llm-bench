@@ -1,0 +1,29 @@
+{
+  "id": "jenkins-23915",
+  "pr": 23915,
+  "title": "Allow entirely disabling CSP headers",
+  "merged_at": "2025-12-11",
+  "issue_text": "Fixes https://github.com/jenkinsci/jenkins/issues/23914.\r\n\r\n### Testing done\r\n\r\nAutotest, basic manual test.\r\n\r\n### Proposed changelog entries\r\n\r\n- Allow entirely disabling CSP headers to work around unusual Jenkins configurations resulting in excessive HTTP response header lengths.\r\n\r\n### Proposed changelog category\r\n\r\n/label rfe\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [x] The issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] UI changes do not introduce regressions when enforcing the current default rules of [Content Security Policy Plugin](https://plugins.jenkins.io/csp/). In particular, new or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\r\n- [ ] For dependency updates, there are links to external changelogs and, if possible, full differentials.\r\n- [ ] For new APIs and extension points, there is a link to at least one consumer.\r\n\r\n### Desired reviewers\r\n\r\n@mention\r\n\r\n<!-- Comment:\r\nIf you need an accelerated review process by the community (e.g., for critical bugs",
+  "base_commit": "d35c3da177",
+  "fixed_commit": "67db13142a",
+  "additions": 70,
+  "deletions": 16,
+  "source_files": [
+    "core/src/main/java/jenkins/security/csp/CspHeader.java",
+    "core/src/main/java/jenkins/security/csp/impl/CspDecorator.java",
+    "core/src/main/java/jenkins/security/csp/impl/CspFilter.java",
+    "core/src/main/java/jenkins/security/csp/impl/SystemPropertyHeaderDecider.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/security/csp/impl/CspHeaderDeciderTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "CspHeaderDeciderTest",
+  "test_command": "mvn test -pl test -am -Dtest=CspHeaderDeciderTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "hard",
+  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test."
+}

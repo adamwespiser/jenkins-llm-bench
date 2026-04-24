@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-11081",
+  "pr": 11081,
+  "title": "[JENKINS-73161] Ensure file parameters are retained across Jenkins restarts",
+  "merged_at": "2025-09-30",
+  "issue_text": "Save the file as temporary file and store the filename in the value. That way we can recover the file parameter on a restart.\r\n\r\n<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\nSee [JENKINS-73161](https://issues.jenkins.io/browse/JENKINS-73161).\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\nAdded a unit test that fails without the fix\r\nManually verified that when deleting a freestyle job from the queue that the temporary file is deleted.\r\nManually verified that the temporary file is deleted once the job starts running\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, include screenshots of the relevant page(s) before and after the change.\r\nFor refactoring and code cleanup changes, exercise the code before and after the change and verify the behavior remains the same.\r\n-->\r\n\r\n### Proposed changelog entries\r\n\r\n- Ensure file parameters are retained across Jenkins restarts\r\n\r\n",
+  "base_commit": "a68faf9554",
+  "fixed_commit": "349d4fc407",
+  "additions": 190,
+  "deletions": 90,
+  "source_files": [
+    "core/src/main/java/hudson/model/FileParameterValue.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/FileParameterValueTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "FileParameterValueTest",
+  "test_command": "mvn test -pl test -am -Dtest=FileParameterValueTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

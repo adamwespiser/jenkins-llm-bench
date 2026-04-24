@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10239",
+  "pr": 10239,
+  "title": "`CronTab.floor` / `.ceil` should return times at minute granularity",
+  "merged_at": "2025-02-09",
+  "issue_text": "f97b5b33b0754532b945340cdee4b6ea1d2f6ba4 seems to have been calling previously unused utility methods. https://github.com/jenkinsci/jenkins/blob/630b6b63abcf30959c7b1457a19e155e5f18a436/core/src/main/java/hudson/triggers/Trigger.java#L223-L224 (#1216) shows how the actual trigger is checked at precise one-minute intervals, and https://github.com/jenkinsci/jenkins/blob/630b6b63abcf30959c7b1457a19e155e5f18a436/core/src/main/java/hudson/scheduler/CronTab.java#L160-L169 does not even consider seconds or microseconds, so the form validation rendered at 2:17:23 would claim that `*/5 * * * *` would next run at 2:20:23, which is not really true: it would run at 2:20:00, or very shortly thereafter, and at any rate not specifically at 23 seconds past the minute.\n\n### Testing done\n\nUnit tests, and then some interactive sanity checks of form validation including of `@hourly` etc.\n\n### Proposed changelog entries\n\n- Form validation for cron schedules included seconds based on the current time, when in fact the trigger fires at minute-granularity slots.\n\n### Proposed upgrade guidelines\n\nN/A\n\n### Desired reviewers\n\n@Vlatombe\n\nBefore the changes are marked as `ready-for-merge`:\n\n```[tasklist]\n### Maintainer checklist\n- [ ] There are at least two (2) approvals for the pull request and no outstanding requests for change.\n- [ ] Conversations in the pull request are over, or it is explicit that a reviewer is not blocking the change.\n- [ ] Changelog entries in the pull request title and/or **Proposed changelog entries** are accurate, human-readable, and in the imperative mood.\n- [ ] Proper changelog labels are set so that the changelog can be generated automatically.\n- [ ] If the change needs additional upgrade steps from users, the `upgrade-guide-needed` label is set and there is a **Proposed upgrade guidelines** section in the pull request title (see [example](https://github.com/jenkinsci/jenkins/pull/4387)).\n- [ ] If it would make sense to backport the change to LTS, a Jira issue must",
+  "base_commit": "f5bbd10e12",
+  "fixed_commit": "1e89d004e2",
+  "additions": 29,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/scheduler/CronTab.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/scheduler/CronTabTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "CronTabTest",
+  "test_command": "mvn test -pl core -am -Dtest=CronTabTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+}

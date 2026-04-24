@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-10538",
+  "pr": 10538,
+  "title": "[JENKINS-33704] Computer configuration not updated correctly after updating nodes",
+  "merged_at": "2025-04-12",
+  "issue_text": "Amends #10494\r\n\r\nSeveral ATHs are failing since #10494\r\n\r\nhttps://ci.jenkins.io/job/Core/job/acceptance-test-harness/job/PR-1956/7/testReport/\r\n\r\nThis is due to the call to `Jenkins#updateComputers(Node...)` being passed both the old and new object for a node when applying an update. This resulted into the old node configuration to be applied to the computer. Changed the call to only pass the new node object.\r\n\r\nThe previous global call to `Jenkins#updateComputerList()` was looking up all nodes attached to the Jenkins node, so was not applying the logic to old node configurations.\r\n\r\nAdded a unit test catching the regression, as this was only caught in ATH.\r\n\r\nSee [JENKINS-33704](https://issues.jenkins.io/browse/JENKINS-33704).\r\n\r\n### Testing done\r\n\r\nConfirmed that before this fix I was able to change the launcher of an agent from the UI and save it without the save persisting completely.  The change to the launcher did not fully persist until the next time I applied or saved the agent configuration.\r\n\r\nConfirmed that after this fix, the change of the launcher from the UI was immediately effective.\r\n\r\n### Proposed changelog entries\r\n\r\n- Ensure computer configuration is updated correctly after updating a node.\r\n\r\n### Proposed changelog category\r\n\r\n/label regression-fix\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [x] The Jira issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and method",
+  "base_commit": "3de8d60dbe",
+  "fixed_commit": "028d8b55fe",
+  "additions": 16,
+  "deletions": 3,
+  "source_files": [
+    "core/src/main/java/jenkins/model/Nodes.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/slaves/JNLPLauncherTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "JNLPLauncherTest",
+  "test_command": "mvn test -pl test -am -Dtest=JNLPLauncherTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

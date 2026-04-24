@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-10607",
+  "pr": 10607,
+  "title": "Add a method isConnected to IComputer and provide implementation in Computer",
+  "merged_at": "2025-08-15",
+  "issue_text": "Adds a new method, `isConnected`, to indicate whether an agent is actually connected to the controller.\r\nCurrently, `isOnline` returns `false` when an agent is:\r\n* either, Temporarily offline but still connected\r\n* or, Actually disconnected.\r\n\r\nThe Javadoc for `isOnline` and `isOffline` has also been updated to clearly point out this behavior.\r\n\r\n**Background**\r\nAt CloudBees, we use `isOnline` and `isOffline` to determine if an agent is connected to the controller. However, to distinguish between a temporarily offline agent and a disconnected one, we often needed to add explicit checks like `Computer#getChannel() != null`.\r\nIntroducing `isConnected` simplifies this logic and makes it easier to understand the behavior of `isOnline` and `isOffline`, especially with the `@see` reference in their Javadoc.\r\n\r\n### Testing done\r\n\r\nAutomated test\r\n\r\n### Proposed changelog entries\r\n\r\nNA\r\n\r\n### Proposed changelog category\r\n\r\n/label skip-changelog\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n### Submitter checklist\r\n\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\r\n- [ ] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\r\n- [ ] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future intro",
+  "base_commit": "00c6707c45",
+  "fixed_commit": "1c6fb787a9",
+  "additions": 64,
+  "deletions": 2,
+  "source_files": [
+    "core/src/main/java/hudson/model/Computer.java",
+    "core/src/main/java/jenkins/model/IComputer.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/ComputerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ComputerTest",
+  "test_command": "mvn test -pl test -am -Dtest=ComputerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

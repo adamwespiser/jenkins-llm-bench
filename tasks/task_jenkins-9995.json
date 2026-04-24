@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9995",
+  "pr": 9995,
+  "title": "[JENKINS-74858]  Added validation for Password length in FIPS mode",
+  "merged_at": "2024-12-05",
+  "issue_text": "See [JENKINS-74858](https://issues.jenkins.io/browse/JENKINS-74858).\r\n\r\nMade changes to ensure that an exisiting user is now unable to alter the password to less than 14 characters in length when operating in FIPS mode.\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\n**Automated Unit Testing**\r\nImplemented unit tests to verify FIPS compliance for password changes:\r\n\r\n1. Ensured that passwords shorter than 14 characters are rejected when FIPS mode is enabled.\r\n2. Verified that mismatched passwords between user.password and user.password2 trigger appropriate errors.\r\n\r\n**Manual Testing**\r\nDid Manual testing to verify my changes to ensure that everything is working properly.\r\n\r\n------------------------------------------------------------\r\n**Without FIPS mode:** Shorter password is being accepted.\r\n![Screenshot 2024-11-20 at 12 37 33\u202fPM](https://github.com/user-attachments/assets/092ecfc3-42a6-4ab5-a7d8-132956eaed6d)\r\n\r\n\r\n-------------------------------------------------------------\r\n**With FIPS mode:** Shorter password is not being accepted.\r\n![Screenshot 2024-11-20 at 12 41 00\u202fPM](https://github.com/user-attachments/assets/7c48a730-1a7f-47af-b315-1fd5cf279924)\r\n![Screenshot 2024-11-20 at 12 41 09\u202fPM](https://github.com/user-attachments/assets/6deb9c6a-0fc6-4776-9555-0bdabce40c91)\r\n\r\n\r\n\r\n\r\n### Proposed changelog entries\r\n\r\n- Added Password validation to ensure that existing users cannot create a password of less than 14 characters in length(when in FIPS mode).\r\n\r\n<!-- Comment:\r\nThe changelog entry should be in the imperative mood; e.g., write \"do this\"/\"return that\" rather than \"does this\"/\"returns that\".\r\nFor examples, see: https://www.jenkins.io/changelog/\r\n\r\nDo not include",
+  "base_commit": "7d8d2a6f12",
+  "fixed_commit": "0f0b023b0f",
+  "additions": 88,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/security/HudsonPrivateSecurityRealm.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/security/HudsonPrivateSecurityRealmFIPSTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "HudsonPrivateSecurityRealmFIPSTest",
+  "test_command": "mvn test -pl test -am -Dtest=HudsonPrivateSecurityRealmFIPSTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}

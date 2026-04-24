@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9026",
+  "pr": 9026,
+  "title": "[JENKINS-65911] Correct JNA method signature for `fcntl(2)`",
+  "merged_at": "2024-03-10",
+  "issue_text": "While looking at JENKINS-72833 I remembered my old friend [JENKINS-65911](https://issues.jenkins.io/browse/JENKINS-65911). While I could no longer reproduce the problem on my macOS system, I was able to reproduce incorrect `fcntl` results in a new unit test when running on macOS (but not Linux). The problem seems to be, as I wrote back in 2021, an incorrect JNA signature. `fcntl` is a variadic function. While I couldn't find much documentation about this, I tried using Java varargs and hoping JNA would deal with this correctly, and it did. My unit test started passing on macOS and there were no regressions running the test on Linux. Just to be sure, I stepped through the restart sequence outside of systemd in a debugger and verified in a separate terminal running `strace` that the system calls on Linux were unchanged. While I was here I also wrote some other tests to increase coverage for this file.\r\n\r\n### Testing done\r\n\r\nBefore this PR, new unit test failed on macOS and passed on Linux. After this PR, passes on both platforms.\r\n\r\nAlso stepped through the restart sequence outside of `systemd` on Linux and verified correct system call input and output in `strace`.\r\n\r\n### Proposed changelog entries\r\n\r\n- Fix a crash when restarting Jenkins on macOS.\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n```[tasklist]\r\n### Submitter checklist\r\n- [ ] The Jira issue, if it exists, is well-described.\r\n- [ ] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [ ] There is automated testing or an explanation as to why this change has no tests.\r\n- [ ] New public classes, fields, and methods are ann",
+  "base_commit": "dc714a7ffb",
+  "fixed_commit": "c9af352f6f",
+  "additions": 104,
+  "deletions": 1,
+  "source_files": [
+    "core/src/main/java/hudson/util/jna/GNUCLibrary.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/hudson/util/jna/GNUCLibraryTest.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "core",
+  "test_class": "GNUCLibraryTest",
+  "test_command": "mvn test -pl core -am -Dtest=GNUCLibraryTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=new_file. Unit test."
+}

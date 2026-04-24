@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-11177",
+  "pr": 11177,
+  "title": "Stream HTML console log",
+  "merged_at": "2025-10-26",
+  "issue_text": "<!-- Comment:\r\nA great PR typically begins with the line below.\r\nReplace XXXXX with the numeric part of the issue ID you created in Jira.\r\nNote that if you want your changes backported into LTS, you need to create a Jira issue. See https://www.jenkins.io/download/lts/#backporting-process for more information.\r\n-->\r\n\r\n- Part of https://github.com/jenkinsci/pipeline-graph-view-plugin/issues/704\r\n- Based on https://github.com/jenkinsci/jenkins/pull/11071\r\n- Adopts https://github.com/jenkinsci/stapler/pull/722\r\n\r\nThis PR is adopting the streaming/unbuffered reads from staplers `LargeText` in `AnnotatedLargeText` and integrates it with the progressive-text in the frontend.\r\n\r\nBefore: start of request; read all the requested log bytes into memory; emit response with start/end/annotation state in headers\r\nAfter: start of request; stream the requested log bytes into multi-part response; emit another multi-part part with start/end/annotation state\r\n\r\n<!-- Comment:\r\nIf the issue is not fully described in Jira, add more information here (justification, pull request links, etc.).\r\n\r\n * We do not require Jira issues for minor improvements.\r\n * Bug fixes should have a Jira issue to facilitate the backporting process.\r\n * Major new features should have a Jira issue.\r\n-->\r\n\r\n### Testing done\r\n\r\nSee updated tests for the `log/progressiveHtml` endpoint. Open console while build is in progress.\r\n\r\n<!-- Comment:\r\nProvide a clear description of how this change was tested.\r\nAt minimum this should include proof that a computer has executed the changed lines.\r\nIdeally this should include an automated test or an explanation as to why this change has no tests.\r\nNote that automated test coverage is less than complete, so a successful PR build does not necessarily imply that a computer has executed the changed lines.\r\nIf automated test coverage does not exist for the lines you are changing, you must describe the scenario(s) in which you manually tested the change.\r\nFor frontend changes, includ",
+  "base_commit": "0d5f528442",
+  "fixed_commit": "4702ffe219",
+  "additions": 117,
+  "deletions": 26,
+  "source_files": [
+    "core/src/main/java/hudson/console/AnnotatedLargeText.java",
+    "core/src/main/java/hudson/console/ConsoleAnnotationOutputStream.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/console/ConsoleAnnotatorTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ConsoleAnnotatorTest",
+  "test_command": "mvn test -pl test -am -Dtest=ConsoleAnnotatorTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-commit-b3651b4753",
+  "pr": null,
+  "title": "[SECURITY-3513]",
+  "merged_at": "2025-03-25",
+  "issue_text": "Co-authored-by: Kevin-CB <kguerroudj@cloudbees.com>",
+  "base_commit": "bf32018bf0",
+  "fixed_commit": "b3651b4753",
+  "additions": 99,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/ComputerSet.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/lib/form/PasswordTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "PasswordTest",
+  "test_command": "mvn test -pl test -am -Dtest=PasswordTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test. No public PR."
+}

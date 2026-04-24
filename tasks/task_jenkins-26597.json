@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-26597",
+  "pr": 26597,
+  "title": "Add streamLoadedBuilds method to avoid full map copy in getEstimatedDurationCandidates",
+  "merged_at": "2026-04-13",
+  "issue_text": "Fixes [#26596](https://github.com/jenkinsci/jenkins/issues/26596)\r\n\r\nSee issue for more context. `getLoadedBuilds()` is called by `getEstimatedDurationCandidates()` on every queue maintenance lock. `getLoadedBuilds()` copies the entire `core` map into a new tree map for every call, even though it only needs the 3 most recent completed builds, which is expensive for jobs with large build histories.\r\n\r\nThis PR adds `streamLoadedBuilds` to lazily stream over builds in memory instead of copying into a new map every queue maintenance cycle in `getEstimatedDurationCandidates`. Also simplifies `getLoadedBuilds` to call `streamLoadedBuilds`, which still does create a new map but is needed for plugin compatibility\r\n\r\n### Testing done\r\n\r\nIt's a small change but I sanity checked it by running Jenkins locally before my change, added logging around the `loadedBuilds` and `getEstimatedDurationCandidates`, confirmed that new jobs lazily load 3 builds after examining 4 (since the 4th build is the current one in progress)\r\n\r\n### Screenshots (UI changes only)\r\n\r\n\r\n#### Before\r\n\r\n#### After\r\n\r\n### Proposed changelog entries\r\n- Improve queue maintenance performance for jobs with large build histories\r\n\r\n### Proposed changelog category\r\n\r\n/label bug,rfe\r\n\r\n### Proposed upgrade guidelines\r\n\r\nN/A\r\n\r\n\r\n### Submitter checklist\r\n\r\n- [x] The issue, if it exists, is well-described.\r\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\r\n- [x] There is automated testing or an explanation as to why this change has no tests.\r\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or h",
+  "base_commit": "1d890e71ba",
+  "fixed_commit": "8813df1869",
+  "additions": 31,
+  "deletions": 10,
+  "source_files": [
+    "core/src/main/java/jenkins/model/lazy/AbstractLazyLoadRunMap.java",
+    "core/src/main/java/jenkins/model/lazy/LazyBuildMixIn.java"
+  ],
+  "test_files_injected": [
+    "core/src/test/java/jenkins/model/lazy/AbstractLazyLoadRunMapTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "core",
+  "test_class": "AbstractLazyLoadRunMapTest",
+  "test_command": "mvn test -pl core -am -Dtest=AbstractLazyLoadRunMapTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": false,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Unit test."
+}

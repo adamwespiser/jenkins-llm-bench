@@ -1,0 +1,28 @@
+{
+  "id": "jenkins-commit-efa1816322",
+  "pr": null,
+  "title": "[SECURITY-3630]",
+  "merged_at": "2025-12-02",
+  "issue_text": "[SECURITY-3630]",
+  "base_commit": "31598feb0a",
+  "fixed_commit": "efa1816322",
+  "additions": 154,
+  "deletions": 8,
+  "source_files": [
+    "cli/src/main/java/hudson/cli/PlainCLIProtocol.java",
+    "core/src/main/java/hudson/cli/CLIAction.java",
+    "core/src/main/java/jenkins/util/FullDuplexHttpService.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/cli/Security3630Test.java"
+  ],
+  "test_injection_type": "new_file",
+  "maven_module": "test",
+  "test_class": "Security3630Test",
+  "test_command": "mvn test -pl test -am -Dtest=Security3630Test -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "3 source file(s), signal=new_file. Integration test. No public PR."
+}

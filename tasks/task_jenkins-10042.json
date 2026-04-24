@@ -1,0 +1,27 @@
+{
+  "id": "jenkins-10042",
+  "pr": 10042,
+  "title": "`PeepholePermalink.Cache`",
+  "merged_at": "2024-12-15",
+  "issue_text": "Jenkins persistently caches permalink values such as `lastUnstableBuild` to a text file `$JENKINS_HOME/job/$name/builds/permalinks`, with the format\n\n```\nlastUnstableBuild 123\nlastFailedBuild -1\n```\n\nwhere `-1` indicates a negative cache. This was implemented because lazy loading of builds means we wish to avoid loading too many historical build records into memory. If you are so lucky as to have had thousands of builds without a single failure, without a cache the controller would need to search them all after every startup just to find that there has never been an unstable build. So the cache is read into memory at most once per job, and written whenever some permalink changes (typically after a build completes).\n\nIn CloudBees CI running in high availability mode this cache implementation was problematic and needed to be replaced with something appropriate for concurrent access. Originally I had tried invalidating the in-memory cache and letting it be reread from disk, but this was a bit inefficient and still vulnerable to race conditions. A more satisfactory solution is to extract the singleton implementation into a beta extension point, similarly to #9846.\n\nThe behavior for Jenkins should be identical, but there may be an ancillary benefit that (in my opinion) the refactored logic is easier to read and reason about. In the original code, an `int` variable was overloaded to mean a build number (when >0), a negative cache result when -1, or no cache result when 0. There actually appears to have been a mistake in the logic (albeit a harmless one) caused by treating 0 as if it were a legitimate build number. This seemed like a great opportunity to practice using `sealed` types as unions to catch such mistakes in the compiler. Additionally, all code relating to the file format (and the rather arbitrary choice of `-1` to mean a negative cache, rather than say `-` or `null`) is encapsulated in the default cache implementation.\n\n### Testing done\n\nThe existing `PeepholeP",
+  "base_commit": "e4bff056c3",
+  "fixed_commit": "ae56d43fec",
+  "additions": 228,
+  "deletions": 96,
+  "source_files": [
+    "core/src/main/java/hudson/model/Job.java",
+    "core/src/main/java/jenkins/model/PeepholePermalink.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/jenkins/model/lazy/LazyBuildMixInTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "LazyBuildMixInTest",
+  "test_command": "mvn test -pl test -am -Dtest=LazyBuildMixInTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "2 source file(s), signal=modified_with_new_methods. Integration test."
+}

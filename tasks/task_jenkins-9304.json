@@ -1,0 +1,26 @@
+{
+  "id": "jenkins-9304",
+  "pr": 9304,
+  "title": "[JENKINS-64553] fix ItemListener not called after updating job via REST API or CLI",
+  "merged_at": "2024-05-27",
+  "issue_text": "when a job is updated via REST API or CLI, the\nItemListener.fireOnUpdated is now called to inform about the change.\n\nSee [JENKINS-64553](https://issues.jenkins.io/browse/JENKINS-64553).\n\n\n### Testing done\n\nadded a Unit test that verifies ItemListener is called. Without the change the test fails.\n\n### Proposed changelog entries\n\n- Consistently notify job listeners when the job definition is updated from the REST API or command line interface.\n\n### Proposed upgrade guidelines\n\nN/A\n\n```[tasklist]\n### Submitter checklist\n- [x] The Jira issue, if it exists, is well-described.\n- [x] The changelog entries and upgrade guidelines are appropriate for the audience affected by the change (users or developers, depending on the change) and are in the imperative mood (see [examples](https://github.com/jenkins-infra/jenkins.io/blob/master/content/_data/changelogs/weekly.yml)). Fill in the **Proposed upgrade guidelines** section only if there are breaking changes or changes that may require extra steps from users during upgrade.\n- [x] There is automated testing or an explanation as to why this change has no tests.\n- [x] New public classes, fields, and methods are annotated with `@Restricted` or have `@since TODO` Javadocs, as appropriate.\n- [x] New deprecations are annotated with `@Deprecated(since = \"TODO\")` or `@Deprecated(forRemoval = true, since = \"TODO\")`, if applicable.\n- [x] New or substantially changed JavaScript is not defined inline and does not call `eval` to ease future introduction of Content Security Policy (CSP) directives (see [documentation](https://www.jenkins.io/doc/developer/security/csp/)).\n- [x] For dependency updates, there are links to external changelogs and, if possible, full differentials.\n- [x] For new APIs and extension points, there is a link to at least one consumer.\n```\n\nBefore the changes are marked as `ready-for-merge`:\n\n```[tasklist]\n### Maintainer checklist\n- [x] There are at least two (2) approvals for the pull request and no outstanding requests",
+  "base_commit": "c46dc4becb",
+  "fixed_commit": "dae17374aa",
+  "additions": 22,
+  "deletions": 0,
+  "source_files": [
+    "core/src/main/java/hudson/model/AbstractItem.java"
+  ],
+  "test_files_injected": [
+    "test/src/test/java/hudson/model/listeners/ItemListenerTest.java"
+  ],
+  "test_injection_type": "modified_with_new_methods",
+  "maven_module": "test",
+  "test_class": "ItemListenerTest",
+  "test_command": "mvn test -pl test -am -Dtest=ItemListenerTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "is_integration_test": true,
+  "expected_fail_on_base": true,
+  "expected_pass_on_fixed": true,
+  "difficulty": "medium",
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+}
