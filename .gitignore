@@ -1,9 +1,6 @@
 # Jenkins repo checkout — large (~250MB) and itself a git repo
 repos/
 
-# Git worktrees created during benchmark runs — ephemeral
-worktrees/
-
 # Run logs — large over time, not essential for reproducibility
 logs/
 
@@ -15,6 +12,9 @@ __pycache__/
 # Virtual environment — machine-specific
 venv/
 .venv/
+
+# Scratch / one-off scripts
+test.sh
 
 # OS
 .DS_Store

@@ -21,7 +21,7 @@
   "test_injection_type": "modified_with_new_methods",
   "maven_module": "test",
   "test_class": "ApiTokenPropertyTest",
-  "test_command": "mvn test -pl test -am -Dtest=ApiTokenPropertyTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "test_command": "mvn test -pl test -am -Dtest=ApiTokenPropertyTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -Dcheckstyle.skip=true -q",
   "is_integration_test": true,
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,

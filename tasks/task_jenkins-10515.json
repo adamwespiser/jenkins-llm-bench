@@ -19,7 +19,7 @@
   "test_injection_type": "modified_with_new_methods",
   "maven_module": "core",
   "test_class": "RunTest",
-  "test_command": "mvn test -pl core -am -Dtest=RunTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q",
+  "test_command": "mvn test -pl core -am -Dtest=RunTest -DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -Dcheckstyle.skip=true -q",
   "is_integration_test": false,
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,

@@ -28,7 +28,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_DIR = Path.home() / "bench" / "repos" / "jenkins"
-WORKTREE_DIR = Path.home() / "bench" / "worktrees"
+WORKTREE_DIR = Path.home() / "bench-worktrees"
 RESULTS_DIR = Path.home() / "bench" / "results"
 LOGS_DIR = Path.home() / "bench" / "logs"
 
@@ -149,7 +149,7 @@ async def run_agent(prompt, agent_cwd, model, max_turns, budget_usd, log_path):
     sys.path.insert(0, str(
         Path.home() / "venvs" / "llm-bench" / "lib" / "python3.14" / "site-packages"
     ))
-    from claude_agent_sdk import query, ClaudeAgentOptions
+    from claude_agent_sdk import query, ClaudeAgentOptions, ClaudeSDKError
     from claude_agent_sdk.types import ResultMessage
 
     options = ClaudeAgentOptions(
@@ -170,16 +170,21 @@ async def run_agent(prompt, agent_cwd, model, max_turns, budget_usd, log_path):
 
     with open(log_path, "w") as f:
         f.write(f"PROMPT:\n{prompt}\n\n{'='*60}\n\n")
-        async for msg in query(prompt=prompt, options=options):
-            messages.append(msg)
-            f.write(repr(msg) + "\n")
-            if isinstance(msg, ResultMessage):
-                result_msg = msg
-                if isinstance(msg.usage, dict):
-                    input_tokens = msg.usage.get("input_tokens", 0)
-                    output_tokens = msg.usage.get("output_tokens", 0)
-                if msg.total_cost_usd:
-                    total_cost = msg.total_cost_usd
+        try:
+            async for msg in query(prompt=prompt, options=options):
+                messages.append(msg)
+                f.write(repr(msg) + "\n")
+                if isinstance(msg, ResultMessage):
+                    result_msg = msg
+                    if isinstance(msg.usage, dict):
+                        input_tokens = msg.usage.get("input_tokens", 0)
+                        output_tokens = msg.usage.get("output_tokens", 0)
+                    if msg.total_cost_usd:
+                        total_cost = msg.total_cost_usd
+        except Exception as e:
+            f.write(f"\nSDK error (possibly max_turns exit): {e}\n")
+            if result_msg is None:
+                raise
 
     duration = time.time() - start
     log(f"Agent done in {duration:.1f}s | cost=${total_cost:.4f}")

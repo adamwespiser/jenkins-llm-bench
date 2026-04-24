@@ -170,7 +170,8 @@ def maven_module_for(test_path):
 def build_test_command(module, test_class):
     return (
         f"mvn test -pl {module} -am -Dtest={test_class} "
-        f"-DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true -q"
+        f"-DfailIfNoTests=false --no-transfer-progress -Denforcer.skip=true "
+        f"-Dcheckstyle.skip=true -q"
     )
 
 
