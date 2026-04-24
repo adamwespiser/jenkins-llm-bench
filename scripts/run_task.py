@@ -159,7 +159,7 @@ async def run_agent(prompt, agent_cwd, model, max_turns, budget_usd, log_path):
         max_turns=max_turns,
         max_budget_usd=budget_usd,
         allowed_tools=["Read", "Edit", "Write", "Bash", "Glob", "Grep"],
-        env={"ANTHROPIC_API_KEY": v} if (v := os.environ.get("ANTHROPIC_API_KEY")) else None,
+        env={"ANTHROPIC_API_KEY": v} if (v := os.environ.get("ANTHROPIC_API_KEY")) else {},
     )
 
     log(f"Starting agent ({model}, cwd={Path(agent_cwd).name}, max_turns={max_turns})")
