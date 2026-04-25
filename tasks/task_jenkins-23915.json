@@ -25,5 +25,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "hard",
-  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test."
+  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test.",
+  "issue_report": "## Allow disabling CSP headers entirely to work around problems in unusual environments\n\n### What feature do you want to see added?\n\nRelated to #23887: It should be possible to entirely remove CSP headers (rather than merely switch to `\u2026-Report-Only`) if absolutely necessary, to resume operation when there are issues with excessive length from extension contributions.\n\nIn some local testing, Jetty fell over after 14.5KB in the `Content-Security-Policy` header, indicating perhaps a total response header length of 16 KB. That's about 14KB of space for non-core extension content; which should be plenty, but could be not enough in extreme situations (e.g., https://github.com/jenkinsci/customizable-header-plugin/pull/288 in an instance with tons of jobs, all with custom header links and different icons).\n\n### Upstream changes\n\n_No response_\n\n### Are you interested in contributing this feature?\n\n_No response_",
+  "issue_report_source": "github:jenkinsci/jenkins#23914"
 }

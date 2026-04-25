@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=new_file. Unit test."
+  "notes": "1 source file(s), signal=new_file. Unit test.",
+  "issue_report": "## CauseOfBlockage of items in Queue is extremely verbose\n\nWhen hovering over a queued item to check on the cause of blockage, the UI displays an extremely large text area showing something like the following:\n{code:java}\n<nodeA> doesn\u2019t have label <label>; <nodeB> doesn\u2019t have label <label>; ...\n{code}\nThe text contains every single node in the Jenkins instance. And on some systems completely fills the browser window obscuring all other text.\n\nBut it is intermittent and on the next refresh (probably by the automatic queue maintenance), the cause of blockage shows more simple cause like \"Waiting for the next available executor for <label1>\" (see [^simple-cause.png] ).\n\n(For that reason I have not been able to capture a screenshot yet. As soon as I can I will attach it to this ticket)\n\n**Sensitive Information**\n\nIt sometimes appears that build parameters shows up in that text.\n\n**Related Issues**\n\nThis seems related to the improvement made in https://issues.jenkins-ci.org/browse/JENKINS-38514.",
+  "issue_report_source": "jira:JENKINS-45927"
 }

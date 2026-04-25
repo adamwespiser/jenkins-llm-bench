@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test.",
+  "issue_report": "## Make deserialization of Map fields in XML files more robust\n\nAccidental serial compatibility mistakes like the one described in [https://github.com/jenkinsci/hashicorp-vault-plugin/issues/326] should be limited in extent to the closest surrounding {{RobustFooConverter}}, which should report the warning to {{OldDataMonitor}} but otherwise ignore\u00a0the broken element and continue deserialization normally.\n\nIn that issue, a mistake involving a {{Map}} field in a folder property lead to the folder itself being corrupted in a way that caused further problems, which we would like to avoid.\n\nhttps://github.com/jenkinsci/jenkins/pull/9653 proposes a change to {{RobustMapConverter}} which would have limited the impact of this kind of mistake.",
+  "issue_report_source": "jira:JENKINS-73687"
 }

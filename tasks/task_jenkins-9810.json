@@ -27,5 +27,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "hard",
-  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test."
+  "notes": "4 source file(s), signal=modified_with_new_methods. Integration test.",
+  "issue_report": "## Builds can be deleted while they are still running\n\nBuilds can be deleted via the\u00a0{{/doDelete}}\u00a0REST API, and the\u00a0{{delete-builds}}\u00a0CLI command\u00a0{_}while they are still running{_}.\u00a0The \u201cDelete build\u201d link in the sidepanel of builds is hidden unless {{{}!it.building and !it.keepLog{}}}, but this is a UI-only restriction. {{Run.delete}} has the same issue, but in practice all of the callers that I found in plugins already check whether the build is done building (most calls are in {{LogRotator}} implementations where {{LogRotator.shouldKeepRun}} handles the issue), but there are some subtle race conditions regarding checking {{Run.isBuilding}} instead of {{{}Run.isLogUpdated{}}} that can lead to {{LogRotator}} deleting Pipeline builds while they are in the middle of finishing.\n\nDeleting a build while it is running can cause various kinds of anomalous behavior as the build continues to run despite its configuration directory being deleted, and it is likely that the build will return after a Jenkins restart since {{build.xml}} may be rewritten as the build continues running.",
+  "issue_report_source": "jira:JENKINS-73835"
 }

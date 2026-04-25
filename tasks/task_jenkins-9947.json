@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test.",
+  "issue_report": "## Job created via REST API attaches to default view (regression in 2.475)\n\nProgrammatically created jobs (via posting XML to url /createItem/api/json?name=my_job_name) now attached to default view in Jenkins (i can see them in /var/lib/jenkins/config.xml eather, section <views><listView><jobNames>).\n\nThis behavior started since we've updated Jenkins from previous LTS (2.462.3) to current LTS (2.479.1)\n\n*Steps to reproduce:*\n # upgrade to Jenkins 2.479.1\n # prepare any valid job XML config (see below)\n # \n{code:bash}\ncurl -X POST -u \"username:api-token\" \\\n     -H \"Content-Type: application/xml\" \\\n     --data-binary @job.xml \\\n     \"https://<jenkins_host>/createItem/api/json?name=my_job_name\"\n{code}\n\n*Expected:*\nJob doesn't attached to any view\n\n*Actual:*\nJob attached to default view\n\n{_}job.xml example{_}:\n{code:xml}\n<?xml version='1.1' encoding='UTF-8'?>\n<project>\n  <description>tst job from API</description>\n  <keepDependencies>false</keepDependencies>\n  <properties/>\n  <canRoam>true</canRoam>\n  <disabled>false</disabled>\n  <triggers/>\n  <builders/>\n  <publishers/>\n  <buildWrappers/>\n</project>\n{code}\nJenkins settings:\n!image-2024-10-31-19-53-42-792.png!\n\nJob attached to default view:\n\n!image-2024-10-31-19-56-01-815.png!",
+  "issue_report_source": "jira:JENKINS-74795"
 }

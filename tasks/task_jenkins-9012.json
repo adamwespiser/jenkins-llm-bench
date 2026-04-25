@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test.",
+  "issue_report": "## Computer.threadPoolForRemoting can be poisoned by bad code\n\nWhilst tracking down a bug in a prviate plugin it was discovered that the bug was caused by the threads {{contextClassLoader}} being set to {{hudson.PluginManager$UberClassLoader}}.\nIn cases where the bug did not appear the {{contextClassloader}} was the {{WebAppClassLoader}}.\n\nThis was surprising as the code in question did not set the context classloader and was running on the {{Computer.threadPoolForRemoting}} {{ThreadPool}}.\n\nThis shows that the {{contextClassloader}} in a task submitted to this {{ThreadPool}} is not stable.\n\nIt is expected that the state of a thread run in an executor from Jenkins core is in a deterministic state.\u00a0\n\nThe threadpool should be tolerant of when ad by whom {{Threads}} are created as well as ensure state is clean/stable before running tasks.\ne..g - in a way similar to the {{Timer}}\u00a0threads by using like the [ContextResettingExecutorService|https://github.com/jenkinsci/jenkins/blob/19f0140adef29e86d150faa056a22ceb011c8b03/core/src/main/java/jenkins/util/ContextResettingExecutorService.java]",
+  "issue_report_source": "jira:JENKINS-72796"
 }

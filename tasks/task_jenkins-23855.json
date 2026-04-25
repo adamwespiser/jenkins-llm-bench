@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test.",
+  "issue_report": "## `CspBuilder` does not properly handle `FetchDirective` fallbacks to uninitialized values\n\n### Jenkins and plugins versions report\n\nJenkins 2.539\n\n### What Operating System are you using (both controller, and any agents involved in the problem)?\n\nn/a\n\n### Reproduction steps\n\n```java\n        CspBuilder builder = new CspBuilder();\n        builder.initialize(FetchDirective.DEFAULT_SRC, Directive.SELF);\n        builder.add(Directive.SCRIPT_SRC, \"example.org\");\n        builder.add(Directive.SCRIPT_SRC_ELEM, \"example.com\");\n```\n\n### Expected Results\n\n`default-src 'self'; script-src 'self' example.org; script-src-elem 'self' example.com example.org;`\n\n### Actual Results\n\n`default-src 'self'; script-src 'self' example.org; script-src-elem 'self' example.com;`\n\n### Anything else?\n\n_No response_\n\n### Are you interested in contributing a fix?\n\n_No response_",
+  "issue_report_source": "github:jenkinsci/jenkins#23854"
 }

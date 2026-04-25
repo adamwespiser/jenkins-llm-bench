@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test.",
+  "issue_report": "## end-of-life monitor shows wrong date\n\nWe have Jenkins masters on Ubuntu 20.04. They started showing end-of-life monitor alerts yesterday. According to the data in [https://github.com/MarkEWaite/jenkins/blob/master/core/src/main/resources/jenkins/monitor/OperatingSystemEndOfLifeAdminMonitor/end-of-life-data.json#L131-L132] that is generally correct, as it's exactly 6 months from now.\n\nHowever, the alert being shown doesn't use the date from the JSON file, but rather the default date from the Java code (the field initialization value at https://github.com/MarkEWaite/jenkins/blob/master/core/src/main/java/jenkins/monitor/OperatingSystemEndOfLifeAdminMonitor.java#L76)\n\n!image-2024-10-02-14-39-45-859.png!",
+  "issue_report_source": "jira:JENKINS-73845"
 }

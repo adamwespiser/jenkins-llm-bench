@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Unit test.",
+  "issue_report": "## Text shown in unexpected locale (regression in 2.444)\n\nh3. Steps to reproduce\n\nConfigure the browser to use English as the preferred language and German as an additional language, then visit the UI.\nh3. Expected results\n{panel:title=Note}\nThese are the _actual_ results prior to 2.444.\n{panel}\nWhen English is the preferred language, everything is shown in English.\nh3. Actual results:\n\nThe UI is shown in English consistently (those texts defined via the property files) but whenever a help is available in German it is shown in German. Only when removing German as an additional language the help is shown in English.",
+  "issue_report_source": "jira:JENKINS-73246"
 }

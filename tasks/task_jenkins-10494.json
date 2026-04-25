@@ -26,5 +26,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "hard",
-  "notes": "5 source file(s), signal=modified_with_new_methods. Integration test."
+  "notes": "5 source file(s), signal=modified_with_new_methods. Integration test.",
+  "issue_report": "## Multiple calls to the CloudRetentionStrategy when removing a node\n\nIf a node has a cloud retention strategy, calling removeNode will execute the cloud retention strategy.  This could cause further node removal and further loops in the call chain.\n\nSince the queue is locked, if node removal is expensive, then Jenkins can potentially appear down while the node removal is happening.\n\nVersion 1.642.1",
+  "issue_report_source": "jira:JENKINS-33704"
 }

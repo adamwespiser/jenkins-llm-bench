@@ -29,10 +29,10 @@ from pathlib import Path
 
 REPO_DIR = Path.home() / "bench" / "repos" / "jenkins"
 WORKTREE_DIR = Path.home() / "bench-worktrees"
-RESULTS_DIR = Path.home() / "bench" / "results"
+DEFAULT_RESULTS_DIR = Path.home() / "bench" / "results"
 LOGS_DIR = Path.home() / "bench" / "logs"
 
-CONDITIONS = ("level1_full", "level2_full", "level2_module")
+CONDITIONS = ("level1_full", "level2_full", "level2_module", "issue_report")
 
 
 def run(cmd, cwd=None, timeout=600, capture=True):
@@ -73,6 +73,28 @@ Steps:
 5. Iterate if needed.
 
 Do not modify the test file.
+"""
+    elif condition == "issue_report":
+        return f"""You are a Jenkins contributor. A bug has been reported and a failing test has been written to reproduce it. The test file is already present in the repository.
+
+Bug report:
+{task['issue_report']}
+
+Run this command to see the failing test:
+  {task['test_command']}
+
+Your working directory is the root of the Jenkins source repository. All file operations should use relative paths from this directory.
+
+Your task:
+1. Run the failing test to see what's broken.
+2. Read the test to understand what behavior is expected.
+3. Search the codebase to find the production code responsible for the bug.
+4. Fix the production code.
+5. Re-run the test to confirm all tests pass.
+
+Do not modify the test file. Fix only production code.
+Do not run `mvn install` or any full-repo build — only use the test command above.
+Do not use absolute paths — use relative paths from the current working directory.
 """
     else:  # level2_full or level2_module
         scope_note = (
@@ -223,11 +245,11 @@ def count_changes(worktree_path, task):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("task_file")
-    parser.add_argument("--condition", choices=CONDITIONS, required=True,
-                        help="level1_full | level2_full | level2_module")
+    parser.add_argument("--condition", choices=CONDITIONS, required=True)
     parser.add_argument("--model", default="claude-sonnet-4-6")
     parser.add_argument("--max-turns", type=int, default=20)
     parser.add_argument("--budget", type=float, default=2.0)
+    parser.add_argument("--results-dir", default=str(DEFAULT_RESULTS_DIR))
     parser.add_argument("--skip-base-validation", action="store_true")
     parser.add_argument("--keep-worktree", action="store_true")
     args = parser.parse_args()
@@ -235,8 +257,13 @@ def main():
     task = json.loads(Path(args.task_file).read_text())
     task_id = task["id"]
     condition = args.condition
+    results_dir = Path(args.results_dir)
 
-    for d in (WORKTREE_DIR, RESULTS_DIR, LOGS_DIR):
+    if condition == "issue_report" and not task.get("issue_report"):
+        print(f"ERROR: task {task_id} has no issue_report field — skipping")
+        return 2
+
+    for d in (WORKTREE_DIR, results_dir, LOGS_DIR):
         d.mkdir(parents=True, exist_ok=True)
 
     worktree_path = WORKTREE_DIR / f"{task_id}__{condition}"
@@ -288,6 +315,11 @@ def main():
         result["agent"] = agent_result
         result["files_changed"], result["lines_changed"] = count_changes(worktree_path, task)
 
+        # Save agent's diff before worktree is cleaned up
+        _, diff_out, _ = run("git diff HEAD", cwd=worktree_path)
+        diff_path = Path(f"{log_prefix}__agent_diff.patch")
+        diff_path.write_text(diff_out)
+
         post_passed, post_dur = run_test(
             worktree_path, task["test_command"], "post-agent",
             Path(f"{log_prefix}__post.log"),
@@ -311,7 +343,7 @@ def main():
             run(f"git worktree remove --force {worktree_path}", cwd=REPO_DIR)
             shutil.rmtree(worktree_path, ignore_errors=True)
 
-    result_file = RESULTS_DIR / f"{task_id}__{condition}__{slug}__{run_ts}.json"
+    result_file = results_dir / f"{task_id}__{condition}__{slug}__{run_ts}.json"
     result_file.write_text(json.dumps(result, indent=2))
     log(f"\nResult: {result['outcome'].upper()} — {result_file.name}")
     return 0 if result["outcome"] == "pass" else 1

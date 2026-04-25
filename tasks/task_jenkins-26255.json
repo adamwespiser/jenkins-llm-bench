@@ -22,5 +22,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test."
+  "notes": "1 source file(s), signal=modified_with_new_methods. Integration test.",
+  "issue_report": "## Do not compute CSP header until it's actually needed\n\n### What feature do you want to see added?\n\nReported in https://github.com/jenkinsci/customizable-header-plugin/issues/315, some CSP extension points do excessive amounts of work and can slow down Jenkins.\n\nThis was not a potential problem I had considered in https://github.com/jenkinsci/jenkins/pull/23915 and so Jenkins still computes the value in `CspFilter`. This should be improved so that setting the `headerName` system property can be a viable workaround for such cases.\n\n### Upstream changes\n\n_No response_\n\n### Are you interested in contributing this feature?\n\nFixed locally",
+  "issue_report_source": "github:jenkinsci/jenkins#26254"
 }

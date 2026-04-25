@@ -23,5 +23,7 @@
   "expected_fail_on_base": true,
   "expected_pass_on_fixed": true,
   "difficulty": "medium",
-  "notes": "2 source file(s), signal=new_file. Unit test."
+  "notes": "2 source file(s), signal=new_file. Unit test.",
+  "issue_report": "## OOME from LineTransformationOutputStream processing CR-delimited output\n\nA CloudBees CI user reported an {{OutOfMemoryError}} on a particular controller. Examination of the heap dump revealed multiple byte arrays in the 1Gb range containing text from running builds; much of the text was of the form of thousands of lines like\n\n{code:none}\nChecking out files:  25% (2345/34567)\n{code}\n\nterminated by CR (ASCII 13). These seem to have been caused by a Windows agent cloning a gigantic Git repository; I was able to confirm in Windows 10 that\n\n{code:groovy}\nnode('windows') {\n    bat 'dir'\n    deleteDir()\n    bat 'git clone https://github.com/jenkinsci/jenkins'\n}\n{code}\n\ndoes produce a bunch of lines of this type. In a real terminal the CR would cause the progress bar to update live on a single line. While the manual page for {{git-clone}} says that {{\\-\\-progress}} is implied only when Git is connected to a terminal, and that works as claimed on Linux, I suppose this code does not work in Windows, and you actually need to pass {{\\-q}}.\n\nCurrently {{LineTransformationOutputStream}} does not treat CR specially (except for purposes of {{trimEOL}}) and so it buffers all of the output until the command completes. While the lack of live progress messages is at most an annoyance, if the output is large it can lead to heap exhaustion.",
+  "issue_report_source": "jira:JENKINS-73090"
 }
