@@ -1,0 +1,25 @@
+{
+  "task_id": "jenkins-10326",
+  "condition": "level1_full",
+  "model": "claude-sonnet-4-6",
+  "timestamp": "20260424T224333",
+  "base_commit": "2a88dba68b",
+  "fixed_commit": "177b452109",
+  "base_test_passed": false,
+  "post_agent_test_passed": false,
+  "agent": {
+    "duration_s": 1218.812426328659,
+    "cost_usd": 1.6371580499999996,
+    "input_tokens": 43,
+    "output_tokens": 56712,
+    "num_messages": 143,
+    "stop_reason": "tool_use",
+    "is_error": true
+  },
+  "files_changed": 1,
+  "lines_changed": 9,
+  "outcome": "agent_error",
+  "error": null,
+  "base_test_duration_s": 180.2400143146515,
+  "post_agent_test_duration_s": 107.83654618263245
+}

@@ -1,0 +1,25 @@
+{
+  "task_id": "jenkins-9653",
+  "condition": "issue_report",
+  "model": "claude-sonnet-4-6",
+  "timestamp": "20260424T233103",
+  "base_commit": "d5271c8d2f",
+  "fixed_commit": "dab6597416",
+  "base_test_passed": false,
+  "post_agent_test_passed": true,
+  "agent": {
+    "duration_s": 246.63214945793152,
+    "cost_usd": 0.1904386,
+    "input_tokens": 8,
+    "output_tokens": 6792,
+    "num_messages": 30,
+    "stop_reason": "end_turn",
+    "is_error": false
+  },
+  "files_changed": 1,
+  "lines_changed": 3,
+  "outcome": "pass",
+  "error": null,
+  "base_test_duration_s": 73.13854765892029,
+  "post_agent_test_duration_s": 34.846638202667236
+}

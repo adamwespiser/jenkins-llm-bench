@@ -1,0 +1,25 @@
+{
+  "task_id": "jenkins-9908",
+  "condition": "issue_report",
+  "model": "claude-opus-4-7",
+  "timestamp": "20260426T174223",
+  "base_commit": "5ab2262790",
+  "fixed_commit": "9e256de2d1",
+  "base_test_passed": false,
+  "post_agent_test_passed": true,
+  "agent": {
+    "duration_s": 223.3854649066925,
+    "cost_usd": 0.239796,
+    "input_tokens": 12,
+    "output_tokens": 2773,
+    "num_messages": 26,
+    "stop_reason": "end_turn",
+    "is_error": false
+  },
+  "files_changed": 1,
+  "lines_changed": 2,
+  "outcome": "pass",
+  "error": null,
+  "base_test_duration_s": 121.02704215049744,
+  "post_agent_test_duration_s": 61.2148380279541
+}

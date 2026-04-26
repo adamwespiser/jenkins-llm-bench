@@ -1,0 +1,615 @@
+{
+  "experiment": {
+    "name": "Jenkins LLM Benchmark \u2014 Opus 4.7 vs Sonnet 4.6 (issue_report condition)",
+    "date": "2026-04-26",
+    "repo": "jenkinsci/jenkins",
+    "condition": "issue_report",
+    "task_set": "selected_21",
+    "num_tasks": 21,
+    "model_opus": "claude-opus-4-7",
+    "model_sonnet": "claude-sonnet-4-6",
+    "max_turns_opus": 80,
+    "max_turns_sonnet": 40,
+    "budget_per_run_usd": 8.0
+  },
+  "aggregate": {
+    "opus_pass": 13,
+    "opus_fail": 8,
+    "opus_pass_rate": 0.619,
+    "sonnet_pass": 12,
+    "sonnet_fail": 9,
+    "sonnet_pass_rate": 0.5714,
+    "sonnet_to_opus_flips": 1,
+    "opus_regressions": 0,
+    "total_opus_cost_usd": 44.32
+  },
+  "tasks": [
+    {
+      "task_id": "jenkins-10326",
+      "pr": 10326,
+      "title": "Remove `/exception` endpoint",
+      "merged_at": "2025-03-05",
+      "source_files": [
+        "core/src/main/java/jenkins/model/Jenkins.java"
+      ],
+      "num_source_files": 1,
+      "additions": 20,
+      "deletions": 15,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 3.4544,
+        "turns": 195,
+        "duration_s": 643,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 2.2201,
+        "turns": 361
+      },
+      "sonnet_to_opus_flip": true,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-10494",
+      "pr": 10494,
+      "title": "[JENKINS-33704] Limit scope of `Jenkins#updateComputerList` to improve performance at scale",
+      "merged_at": "2025-04-08",
+      "source_files": [
+        "core/src/main/java/hudson/model/AbstractCIBase.java",
+        "core/src/main/java/hudson/model/Computer.java",
+        "core/src/main/java/hudson/model/Node.java",
+        "core/src/main/java/jenkins/model/Jenkins.java",
+        "core/src/main/java/jenkins/model/Nodes.java"
+      ],
+      "num_source_files": 5,
+      "additions": 130,
+      "deletions": 45,
+      "difficulty": "hard",
+      "opus_4_7": {
+        "outcome": "agent_error",
+        "cost_usd": 4.7219,
+        "turns": 216,
+        "duration_s": 1206,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 0.5654,
+        "turns": 121
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-10515",
+      "pr": 10515,
+      "title": "[JENKINS-75081] Avoid heap allocation when rendering large logs",
+      "merged_at": "2025-05-02",
+      "source_files": [
+        "core/src/main/java/hudson/console/AnnotatedLargeText.java",
+        "core/src/main/java/hudson/console/ConsoleAnnotator.java",
+        "core/src/main/java/hudson/model/Run.java"
+      ],
+      "num_source_files": 3,
+      "additions": 50,
+      "deletions": 13,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.5676,
+        "turns": 30,
+        "duration_s": 356,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.3947,
+        "turns": 127
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-11298",
+      "pr": 11298,
+      "title": "[JENKINS-45927] Truncate verbose CauseOfBlockage messages in queue",
+      "merged_at": "2025-12-13",
+      "source_files": [
+        "core/src/main/java/jenkins/model/queue/CompositeCauseOfBlockage.java"
+      ],
+      "num_source_files": 1,
+      "additions": 115,
+      "deletions": 1,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.2212,
+        "turns": 28,
+        "duration_s": 242,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.0827,
+        "turns": 28
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-23855",
+      "pr": 23855,
+      "title": "Fix CspBuilder not applying fallback to uninitialized directive",
+      "merged_at": "2025-11-28",
+      "source_files": [
+        "core/src/main/java/jenkins/security/csp/CspBuilder.java"
+      ],
+      "num_source_files": 1,
+      "additions": 35,
+      "deletions": 26,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.5709,
+        "turns": 38,
+        "duration_s": 342,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.2064,
+        "turns": 29
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-23859",
+      "pr": 23859,
+      "title": "API tokens with expiration date",
+      "merged_at": "2026-01-26",
+      "source_files": [
+        "core/src/main/java/hudson/model/userproperty/UserPropertyCategorySecurityAction.java",
+        "core/src/main/java/jenkins/model/navigation/UserAction.java",
+        "core/src/main/java/jenkins/security/ApiTokenProperty.java",
+        "core/src/main/java/jenkins/security/apitoken/ApiTokenStore.java",
+        "core/src/main/java/jenkins/security/apitoken/TokenUuidAndPlainValue.java"
+      ],
+      "num_source_files": 5,
+      "additions": 450,
+      "deletions": 39,
+      "difficulty": "hard",
+      "opus_4_7": {
+        "outcome": "agent_error",
+        "cost_usd": 4.5138,
+        "turns": 346,
+        "duration_s": 1399,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 0.8649,
+        "turns": 134
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-23915",
+      "pr": 23915,
+      "title": "Allow entirely disabling CSP headers",
+      "merged_at": "2025-12-11",
+      "source_files": [
+        "core/src/main/java/jenkins/security/csp/CspHeader.java",
+        "core/src/main/java/jenkins/security/csp/impl/CspDecorator.java",
+        "core/src/main/java/jenkins/security/csp/impl/CspFilter.java",
+        "core/src/main/java/jenkins/security/csp/impl/SystemPropertyHeaderDecider.java"
+      ],
+      "num_source_files": 4,
+      "additions": 70,
+      "deletions": 16,
+      "difficulty": "hard",
+      "opus_4_7": {
+        "outcome": "fail",
+        "cost_usd": 5.2748,
+        "turns": 299,
+        "duration_s": 1756,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 1.0264,
+        "turns": 153
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-26240",
+      "pr": 26240,
+      "title": "Use system temp directory for CommandInstaller scripts",
+      "merged_at": "2026-02-18",
+      "source_files": [
+        "core/src/main/java/hudson/tools/AbstractCommandInstaller.java"
+      ],
+      "num_source_files": 1,
+      "additions": 30,
+      "deletions": 1,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.806,
+        "turns": 73,
+        "duration_s": 494,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.5455,
+        "turns": 149
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-26255",
+      "pr": 26255,
+      "title": "Do not compute CSP header if disabled",
+      "merged_at": "2026-02-06",
+      "source_files": [
+        "core/src/main/java/jenkins/security/csp/impl/CspFilter.java"
+      ],
+      "num_source_files": 1,
+      "additions": 52,
+      "deletions": 5,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "agent_error",
+        "cost_usd": 4.4765,
+        "turns": 216,
+        "duration_s": 1109,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 0.5269,
+        "turns": 137
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-26291",
+      "pr": 26291,
+      "title": "Fix link to polling log of upstream build caused by an SCM trigger after a Jenkins restart",
+      "merged_at": "2026-02-18",
+      "source_files": [
+        "core/src/main/java/hudson/model/Cause.java"
+      ],
+      "num_source_files": 1,
+      "additions": 112,
+      "deletions": 0,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "fail",
+        "cost_usd": 2.7224,
+        "turns": 149,
+        "duration_s": 889,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 0.8233,
+        "turns": 138
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-26331",
+      "pr": 26331,
+      "title": "Encode log recorder name when redirecting",
+      "merged_at": "2026-02-20",
+      "source_files": [
+        "core/src/main/java/hudson/logging/LogRecorderManager.java"
+      ],
+      "num_source_files": 1,
+      "additions": 15,
+      "deletions": 1,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "agent_error",
+        "cost_usd": 4.0579,
+        "turns": 207,
+        "duration_s": 767,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 1.0045,
+        "turns": 147
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-26597",
+      "pr": 26597,
+      "title": "Add streamLoadedBuilds method to avoid full map copy in getEstimatedDurationCandidates",
+      "merged_at": "2026-04-13",
+      "source_files": [
+        "core/src/main/java/jenkins/model/lazy/AbstractLazyLoadRunMap.java",
+        "core/src/main/java/jenkins/model/lazy/LazyBuildMixIn.java"
+      ],
+      "num_source_files": 2,
+      "additions": 31,
+      "deletions": 10,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.6341,
+        "turns": 48,
+        "duration_s": 336,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.149,
+        "turns": 46
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-8814",
+      "pr": 8814,
+      "title": "[JENKINS-72469] Avoid repeated tool downloads from misconfigured HTTP servers",
+      "merged_at": "2024-01-02",
+      "source_files": [
+        "core/src/main/java/hudson/FilePath.java"
+      ],
+      "num_source_files": 1,
+      "additions": 111,
+      "deletions": 2,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.6634,
+        "turns": 45,
+        "duration_s": 235,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.3697,
+        "turns": 51
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9012",
+      "pr": 9012,
+      "title": "[JENKINS-72796] stable context classloader for Computer.threadPoolForRemoting",
+      "merged_at": "2024-03-06",
+      "source_files": [
+        "core/src/main/java/hudson/model/Computer.java"
+      ],
+      "num_source_files": 1,
+      "additions": 44,
+      "deletions": 1,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.4783,
+        "turns": 44,
+        "duration_s": 169,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.3217,
+        "turns": 61
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9219",
+      "pr": 9219,
+      "title": "[JENKINS-73090] Handle CR from `LineTransformationOutputStream`",
+      "merged_at": "2024-05-18",
+      "source_files": [
+        "core/src/main/java/hudson/console/HyperlinkNote.java",
+        "core/src/main/java/hudson/console/LineTransformationOutputStream.java"
+      ],
+      "num_source_files": 2,
+      "additions": 79,
+      "deletions": 7,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.4094,
+        "turns": 40,
+        "duration_s": 197,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.1431,
+        "turns": 33
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9370",
+      "pr": 9370,
+      "title": "[JENKINS-73246] Fix text shown in unexpected locale",
+      "merged_at": "2024-06-11",
+      "source_files": [
+        "core/src/main/java/hudson/model/Descriptor.java"
+      ],
+      "num_source_files": 1,
+      "additions": 23,
+      "deletions": 0,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.3994,
+        "turns": 34,
+        "duration_s": 146,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.3575,
+        "turns": 42
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9653",
+      "pr": 9653,
+      "title": "[JENKINS-73687] Make deserialization of `Map` fields in XML files more robust",
+      "merged_at": "2024-09-13",
+      "source_files": [
+        "core/src/main/java/hudson/util/RobustMapConverter.java"
+      ],
+      "num_source_files": 1,
+      "additions": 52,
+      "deletions": 0,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 1.8978,
+        "turns": 123,
+        "duration_s": 631,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.1904,
+        "turns": 30
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9727",
+      "pr": 9727,
+      "title": "[JENKINS-63343] Validate element types for collections and maps when deserializing XML files",
+      "merged_at": "2024-10-11",
+      "source_files": [
+        "core/src/main/java/hudson/util/RobustCollectionConverter.java",
+        "core/src/main/java/hudson/util/RobustMapConverter.java",
+        "core/src/main/java/hudson/util/RobustReflectionConverter.java"
+      ],
+      "num_source_files": 3,
+      "additions": 396,
+      "deletions": 20,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 1.4082,
+        "turns": 66,
+        "duration_s": 543,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 1.3772,
+        "turns": 138
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9810",
+      "pr": 9810,
+      "title": "[JENKINS-73835] Do not allow builds to be deleted while they are still running and ensure build discarders run after builds are fully complete",
+      "merged_at": "2024-10-12",
+      "source_files": [
+        "core/src/main/java/hudson/model/Run.java",
+        "core/src/main/java/hudson/tasks/LogRotator.java",
+        "core/src/main/java/jenkins/model/BackgroundGlobalBuildDiscarder.java",
+        "core/src/main/java/jenkins/model/GlobalBuildDiscarderListener.java"
+      ],
+      "num_source_files": 4,
+      "additions": 64,
+      "deletions": 26,
+      "difficulty": "hard",
+      "opus_4_7": {
+        "outcome": "agent_error",
+        "cost_usd": 2.9754,
+        "turns": 219,
+        "duration_s": 720,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 0.7497,
+        "turns": 181
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9908",
+      "pr": 9908,
+      "title": "[JENKINS-73845] Fix OperatingSystemEndOfLifeAdminMonitor endOfLifeDate displayed on first warning day",
+      "merged_at": "2024-10-25",
+      "source_files": [
+        "core/src/main/java/jenkins/monitor/OperatingSystemEndOfLifeAdminMonitor.java"
+      ],
+      "num_source_files": 1,
+      "additions": 26,
+      "deletions": 1,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "pass",
+        "cost_usd": 0.2398,
+        "turns": 26,
+        "duration_s": 223,
+        "stop_reason": "end_turn"
+      },
+      "sonnet_4_6": {
+        "outcome": "pass",
+        "cost_usd": 0.0917,
+        "turns": 26
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    },
+    {
+      "task_id": "jenkins-9947",
+      "pr": 9947,
+      "title": "[JENKINS-74795] Job created via REST API attaches to default view",
+      "merged_at": "2024-11-08",
+      "source_files": [
+        "core/src/main/java/hudson/model/ModifiableItemGroup.java"
+      ],
+      "num_source_files": 1,
+      "additions": 55,
+      "deletions": 1,
+      "difficulty": "medium",
+      "opus_4_7": {
+        "outcome": "agent_error",
+        "cost_usd": 3.8297,
+        "turns": 209,
+        "duration_s": 774,
+        "stop_reason": "tool_use"
+      },
+      "sonnet_4_6": {
+        "outcome": "fail",
+        "cost_usd": 0.6677,
+        "turns": 111
+      },
+      "sonnet_to_opus_flip": false,
+      "opus_regression": false
+    }
+  ]
+}
